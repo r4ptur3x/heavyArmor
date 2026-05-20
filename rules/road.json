@@ -10,10 +10,10 @@
   },
   "rules": [
     {
-      "name": "road north+south+east tee",
+      "name": "road north+south+east tee rotate 180",
       "requires": ["N", "S", "E"],
       "model": "tee",
-      "rotationDegrees": 0
+      "rotationDegrees": 180
     },
     {
       "name": "road south+east corner",
