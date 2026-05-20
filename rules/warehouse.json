@@ -2,20 +2,66 @@
   "type": "warehouse",
   "color": "#2f8f46",
   "usesModel": true,
-  "scaleToTileFootprint": true,
-  "preserveModelHeight": true,
   "defaultFacing": "E",
-  "verticalRotationOffsetDegrees": 180,
   "models": {
     "isolated": "./models/SM_warehouse_001a",
     "end": "./models/SM_warehouse_001c",
     "center": "./models/SM_warehouse_001b"
   },
-  "adjacencyRules": {
-    "0": "isolated",
-    "1": "end",
-    "oppositeEW": "center",
-    "oppositeNS": "center",
-    "fallback2Plus": "center"
-  }
+  "rules": [
+    {
+      "name": "warehouse isolated",
+      "requires": [],
+      "requiresExactCount": 0,
+      "model": "isolated",
+      "rotationDegrees": 0
+    },
+    {
+      "name": "warehouse end faces east",
+      "requires": ["E"],
+      "requiresExactCount": 1,
+      "model": "end",
+      "rotationDegrees": 0
+    },
+    {
+      "name": "warehouse end faces west",
+      "requires": ["W"],
+      "requiresExactCount": 1,
+      "model": "end",
+      "rotationDegrees": 180
+    },
+    {
+      "name": "warehouse end faces south with vertical offset",
+      "requires": ["S"],
+      "requiresExactCount": 1,
+      "model": "end",
+      "rotationDegrees": 270
+    },
+    {
+      "name": "warehouse end faces north with vertical offset",
+      "requires": ["N"],
+      "requiresExactCount": 1,
+      "model": "end",
+      "rotationDegrees": 90
+    },
+    {
+      "name": "warehouse horizontal center",
+      "requires": ["E", "W"],
+      "model": "center",
+      "rotationDegrees": 0
+    },
+    {
+      "name": "warehouse vertical center with offset",
+      "requires": ["N", "S"],
+      "model": "center",
+      "rotationDegrees": 270
+    },
+    {
+      "name": "warehouse center fallback",
+      "requiresMinimumCount": 2,
+      "model": "center",
+      "rotationDegrees": 0,
+      "default": true
+    }
+  ]
 }
