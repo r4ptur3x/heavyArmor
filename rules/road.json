@@ -15,10 +15,10 @@
       "rotationDegrees": 0
     },
     {
-      "name": "road south+west corner rotate 90",
+      "name": "road south+west corner rotate 270",
       "requires": ["S", "W"],
       "model": "corner",
-      "rotationDegrees": 90
+      "rotationDegrees": 270
     },
     {
       "name": "road west+north corner rotate 180",
