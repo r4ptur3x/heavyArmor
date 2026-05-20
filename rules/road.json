@@ -2,15 +2,36 @@
   "type": "road",
   "color": "#7b4b2a",
   "usesModel": true,
-  "scaleToTileFootprint": true,
-  "heightMode": "typeNormalized",
-  "modelHeight": 0.01,
   "defaultFacing": "E",
   "models": {
     "default": "./models/SM_road_001a",
-    "cornerSE": "./models/SM_road_001b"
+    "corner": "./models/SM_road_001b"
   },
-  "adjacencyRules": {
-    "roadSouthAndEast": "cornerSE"
-  }
+  "rules": [
+    {
+      "name": "road south+east corner",
+      "requires": ["S", "E"],
+      "model": "corner",
+      "rotationDegrees": 0
+    },
+    {
+      "name": "road west+north corner rotate 180",
+      "requires": ["W", "N"],
+      "model": "corner",
+      "rotationDegrees": 180
+    },
+    {
+      "name": "road west+east straight rotate 90",
+      "requires": ["W", "E"],
+      "model": "default",
+      "rotationDegrees": 90
+    },
+    {
+      "name": "road default",
+      "requires": [],
+      "model": "default",
+      "rotationDegrees": 0,
+      "default": true
+    }
+  ]
 }
