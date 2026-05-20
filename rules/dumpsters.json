@@ -1,0 +1,7 @@
+{
+  "type": "dumpsters",
+  "color": "#1f78d1",
+  "usesModel": false,
+  "usesCube": true,
+  "height": 0.2
+}
