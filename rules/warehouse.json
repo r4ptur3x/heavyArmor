@@ -1,0 +1,21 @@
+{
+  "type": "warehouse",
+  "color": "#2f8f46",
+  "usesModel": true,
+  "scaleToTileFootprint": true,
+  "preserveModelHeight": true,
+  "defaultFacing": "E",
+  "verticalRotationOffsetDegrees": 180,
+  "models": {
+    "isolated": "./models/SM_warehouse_001a",
+    "end": "./models/SM_warehouse_001c",
+    "center": "./models/SM_warehouse_001b"
+  },
+  "adjacencyRules": {
+    "0": "isolated",
+    "1": "end",
+    "oppositeEW": "center",
+    "oppositeNS": "center",
+    "fallback2Plus": "center"
+  }
+}
