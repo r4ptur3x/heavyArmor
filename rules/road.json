@@ -5,9 +5,16 @@
   "defaultFacing": "E",
   "models": {
     "default": "./models/SM_road_001a",
-    "corner": "./models/SM_road_001b"
+    "corner": "./models/SM_road_001b",
+    "tee": "./models/SM_road_001c"
   },
   "rules": [
+    {
+      "name": "road north+south+east tee",
+      "requires": ["N", "S", "E"],
+      "model": "tee",
+      "rotationDegrees": 0
+    },
     {
       "name": "road south+east corner",
       "requires": ["S", "E"],
