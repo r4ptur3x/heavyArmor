@@ -1,0 +1,9 @@
+{
+  "rules": [
+    "road.json",
+    "warehouse.json",
+    "kiosk.json",
+    "parking_lot.json",
+    "dumpsters.json"
+  ]
+}
