@@ -1,0 +1,11 @@
+{
+  "type": "kiosk",
+  "color": "#c62828",
+  "usesModel": true,
+  "scaleToTileFootprint": true,
+  "preserveModelHeight": true,
+  "defaultFacing": "E",
+  "models": {
+    "default": "./models/SM_kiosk_001a"
+  }
+}
