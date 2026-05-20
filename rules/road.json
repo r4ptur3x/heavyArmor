@@ -3,9 +3,14 @@
   "color": "#7b4b2a",
   "usesModel": true,
   "scaleToTileFootprint": true,
-  "preserveModelHeight": true,
+  "heightMode": "typeNormalized",
+  "modelHeight": 0.01,
   "defaultFacing": "E",
   "models": {
-    "default": "./models/SM_road_001a"
+    "default": "./models/SM_road_001a",
+    "cornerSE": "./models/SM_road_001b"
+  },
+  "adjacencyRules": {
+    "roadSouthAndEast": "cornerSE"
   }
 }
