@@ -33,6 +33,13 @@
       "rotationDegrees": 90
     },
     {
+      "name": "road east end rotate 90",
+      "requires": ["E"],
+      "requiresExactCount": 1,
+      "model": "default",
+      "rotationDegrees": 90
+    },
+    {
       "name": "road default",
       "requires": [],
       "model": "default",
