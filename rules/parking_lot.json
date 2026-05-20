@@ -1,0 +1,7 @@
+{
+  "type": "parking lot",
+  "color": "#303030",
+  "usesModel": false,
+  "usesCube": true,
+  "height": 0.01
+}
