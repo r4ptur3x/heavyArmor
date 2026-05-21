@@ -29,14 +29,14 @@
       "rotationDegrees": 0
     },
     {
-      "name": "wall north south west mixed junction rotate 90",
+      "name": "wall north south west mixed junction rotate 270",
       "requiresAnyType": [
         { "direction": "N", "types": ["wall", "door", "window"] },
         { "direction": "S", "types": ["wall", "door", "window"] },
         { "direction": "W", "types": ["wall", "door", "window"] }
       ],
       "model": "northWestEast",
-      "rotationDegrees": 90
+      "rotationDegrees": 270
     },
     {
       "name": "wall north vertical neighbor rotate 90",
