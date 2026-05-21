@@ -1,7 +1,8 @@
 {
   "type": "dumpsters",
   "color": "#1f78d1",
-  "usesModel": false,
-  "usesCube": true,
+  "usesModel": true,
+  "usesCube": false,
+  "model": "./models/SM_dumpsters_001a.fbx",
   "height": 0.2
 }
