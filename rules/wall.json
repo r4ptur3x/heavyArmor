@@ -8,14 +8,24 @@
   },
   "rules": [
     {
-      "name": "wall connected north rotate 90",
-      "requires": ["N"],
+      "name": "wall north vertical neighbor rotate 90",
+      "requiresAnyType": [
+        {
+          "direction": "N",
+          "types": ["wall", "door", "window"]
+        }
+      ],
       "model": "default",
       "rotationDegrees": 90
     },
     {
-      "name": "wall connected south rotate 90",
-      "requires": ["S"],
+      "name": "wall south vertical neighbor rotate 90",
+      "requiresAnyType": [
+        {
+          "direction": "S",
+          "types": ["wall", "door", "window"]
+        }
+      ],
       "model": "default",
       "rotationDegrees": 90
     },
