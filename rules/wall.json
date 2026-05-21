@@ -9,10 +9,10 @@
   },
   "rules": [
     {
-      "name": "wall north west east junction",
+      "name": "wall north west east junction rotate 180",
       "requires": ["N", "W", "E"],
       "model": "northWestEast",
-      "rotationDegrees": 0
+      "rotationDegrees": 180
     },
     {
       "name": "wall north vertical neighbor rotate 90",
