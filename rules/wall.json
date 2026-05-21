@@ -1,0 +1,18 @@
+{
+  "type": "wall",
+  "color": "#d95f5f",
+  "usesModel": true,
+  "usesCube": false,
+  "models": {
+    "default": "./models/SM_wall_001a"
+  },
+  "rules": [
+    {
+      "name": "wall default",
+      "requires": [],
+      "model": "default",
+      "rotationDegrees": 0,
+      "default": true
+    }
+  ]
+}
