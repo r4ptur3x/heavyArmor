@@ -1,0 +1,18 @@
+{
+  "type": "door",
+  "color": "#d9c55f",
+  "usesModel": true,
+  "usesCube": false,
+  "models": {
+    "default": "./models/SM_door_001a"
+  },
+  "rules": [
+    {
+      "name": "door default",
+      "requires": [],
+      "model": "default",
+      "rotationDegrees": 0,
+      "default": true
+    }
+  ]
+}
