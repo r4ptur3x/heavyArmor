@@ -1,6 +1,6 @@
 {
   "type": "parking lot",
-  "color": "#303030",
+  "color": "#3f8f3f",
   "usesModel": true,
   "usesCube": false,
   "models": {
