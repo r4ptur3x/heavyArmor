@@ -8,6 +8,18 @@
   },
   "rules": [
     {
+      "name": "wall connected north rotate 90",
+      "requires": ["N"],
+      "model": "default",
+      "rotationDegrees": 90
+    },
+    {
+      "name": "wall connected south rotate 90",
+      "requires": ["S"],
+      "model": "default",
+      "rotationDegrees": 90
+    },
+    {
       "name": "wall default",
       "requires": [],
       "model": "default",
