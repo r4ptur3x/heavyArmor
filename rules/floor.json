@@ -1,0 +1,18 @@
+{
+  "type": "floor",
+  "color": "#6fb7ff",
+  "usesModel": true,
+  "usesCube": false,
+  "models": {
+    "default": "./models/SM_floor_001a"
+  },
+  "rules": [
+    {
+      "name": "floor default",
+      "requires": [],
+      "model": "default",
+      "rotationDegrees": 0,
+      "default": true
+    }
+  ]
+}
