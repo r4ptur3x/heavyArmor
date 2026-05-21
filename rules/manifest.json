@@ -4,6 +4,10 @@
     "warehouse.json",
     "kiosk.json",
     "parking_lot.json",
-    "dumpsters.json"
+    "dumpsters.json",
+    "floor.json",
+    "wall.json",
+    "door.json",
+    "window.json"
   ]
 }
