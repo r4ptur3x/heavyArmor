@@ -8,6 +8,28 @@
   },
   "rules": [
     {
+      "name": "door north wall or door rotate 90",
+      "requiresAnyType": [
+        {
+          "direction": "N",
+          "types": ["wall", "door"]
+        }
+      ],
+      "model": "default",
+      "rotationDegrees": 90
+    },
+    {
+      "name": "door south wall or door rotate 90",
+      "requiresAnyType": [
+        {
+          "direction": "S",
+          "types": ["wall", "door"]
+        }
+      ],
+      "model": "default",
+      "rotationDegrees": 90
+    },
+    {
       "name": "door default",
       "requires": [],
       "model": "default",
