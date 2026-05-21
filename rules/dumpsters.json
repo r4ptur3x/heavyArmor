@@ -3,6 +3,8 @@
   "color": "#1f78d1",
   "usesModel": true,
   "usesCube": false,
-  "model": "./models/SM_dumpsters_001a.fbx",
+  "models": {
+    "default": "./models/SM_dumpsters_001a"
+  },
   "height": 0.2
 }
