@@ -1,6 +1,6 @@
 {
   "type": "kiosk",
-  "color": "#c62828",
+  "color": "#c93fd1",
   "usesModel": true,
   "scaleToTileFootprint": true,
   "preserveModelHeight": true,
