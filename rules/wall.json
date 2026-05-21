@@ -4,9 +4,16 @@
   "usesModel": true,
   "usesCube": false,
   "models": {
-    "default": "./models/SM_wall_001a"
+    "default": "./models/SM_wall_001a",
+    "northWestEast": "./models/SM_wall_001b"
   },
   "rules": [
+    {
+      "name": "wall north west east junction",
+      "requires": ["N", "W", "E"],
+      "model": "northWestEast",
+      "rotationDegrees": 0
+    },
     {
       "name": "wall north vertical neighbor rotate 90",
       "requiresAnyType": [
