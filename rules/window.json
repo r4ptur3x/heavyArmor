@@ -1,0 +1,18 @@
+{
+  "type": "window",
+  "color": "#5fd9b4",
+  "usesModel": true,
+  "usesCube": false,
+  "models": {
+    "default": "./models/SM_window_001a"
+  },
+  "rules": [
+    {
+      "name": "window default",
+      "requires": [],
+      "model": "default",
+      "rotationDegrees": 0,
+      "default": true
+    }
+  ]
+}
