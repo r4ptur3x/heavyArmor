@@ -1,7 +1,18 @@
 {
   "type": "parking lot",
   "color": "#303030",
-  "usesModel": false,
-  "usesCube": true,
-  "height": 0.01
+  "usesModel": true,
+  "usesCube": false,
+  "models": {
+    "default": "./models/SM_parking_lot_001a"
+  },
+  "rules": [
+    {
+      "name": "parking lot default",
+      "requires": [],
+      "model": "default",
+      "rotationDegrees": 0,
+      "default": true
+    }
+  ]
 }
