@@ -9,8 +9,21 @@
   },
   "rules": [
     {
-      "name": "wall north west east junction rotate 180",
-      "requires": ["N", "W", "E"],
+      "name": "wall north west east mixed junction rotate 180",
+      "requiresAnyType": [
+        {
+          "direction": "N",
+          "types": ["wall", "door", "window"]
+        },
+        {
+          "direction": "W",
+          "types": ["wall", "door", "window"]
+        },
+        {
+          "direction": "E",
+          "types": ["wall", "door", "window"]
+        }
+      ],
       "model": "northWestEast",
       "rotationDegrees": 180
     },
