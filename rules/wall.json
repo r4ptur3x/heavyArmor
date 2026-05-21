@@ -11,18 +11,9 @@
     {
       "name": "wall north west east mixed junction rotate 180",
       "requiresAnyType": [
-        {
-          "direction": "N",
-          "types": ["wall", "door", "window"]
-        },
-        {
-          "direction": "W",
-          "types": ["wall", "door", "window"]
-        },
-        {
-          "direction": "E",
-          "types": ["wall", "door", "window"]
-        }
+        { "direction": "N", "types": ["wall", "door", "window"] },
+        { "direction": "W", "types": ["wall", "door", "window"] },
+        { "direction": "E", "types": ["wall", "door", "window"] }
       ],
       "model": "northWestEast",
       "rotationDegrees": 180
@@ -30,29 +21,27 @@
     {
       "name": "wall south west east mixed junction",
       "requiresAnyType": [
-        {
-          "direction": "S",
-          "types": ["wall", "door", "window"]
-        },
-        {
-          "direction": "W",
-          "types": ["wall", "door", "window"]
-        },
-        {
-          "direction": "E",
-          "types": ["wall", "door", "window"]
-        }
+        { "direction": "S", "types": ["wall", "door", "window"] },
+        { "direction": "W", "types": ["wall", "door", "window"] },
+        { "direction": "E", "types": ["wall", "door", "window"] }
       ],
       "model": "northWestEast",
       "rotationDegrees": 0
     },
     {
+      "name": "wall north south west mixed junction rotate 90",
+      "requiresAnyType": [
+        { "direction": "N", "types": ["wall", "door", "window"] },
+        { "direction": "S", "types": ["wall", "door", "window"] },
+        { "direction": "W", "types": ["wall", "door", "window"] }
+      ],
+      "model": "northWestEast",
+      "rotationDegrees": 90
+    },
+    {
       "name": "wall north vertical neighbor rotate 90",
       "requiresAnyType": [
-        {
-          "direction": "N",
-          "types": ["wall", "door", "window"]
-        }
+        { "direction": "N", "types": ["wall", "door", "window"] }
       ],
       "model": "default",
       "rotationDegrees": 90
@@ -60,10 +49,7 @@
     {
       "name": "wall south vertical neighbor rotate 90",
       "requiresAnyType": [
-        {
-          "direction": "S",
-          "types": ["wall", "door", "window"]
-        }
+        { "direction": "S", "types": ["wall", "door", "window"] }
       ],
       "model": "default",
       "rotationDegrees": 90
