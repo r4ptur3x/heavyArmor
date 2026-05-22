@@ -140,7 +140,8 @@ function applyCurrentColors() {
   defaultColorsToggleButton.textContent = defaultColorsEnabled
     ? "Default Colors: On"
     : "Default Colors: Off";
-}\nfunction toggleDefaultColors() {
+}
+function toggleDefaultColors() {
   defaultColorsEnabled = !defaultColorsEnabled;
   applyCurrentColors();
   setStatus(
