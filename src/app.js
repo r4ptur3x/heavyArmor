@@ -3,6 +3,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import { APP_CONFIG } from "./config.js";
+import { buildRenderStatus } from "./status-builders.js";
 const ASSET_VERSION = APP_CONFIG.ASSET_VERSION;
 const CACHE_BUST = ASSET_VERSION + "-" + Date.now();
 let currentSpreadsheetId = "1A4THHf9Z5o5iXKxSrT8IvJT8pWM1nj2QjyEOVV_jsPQ";
