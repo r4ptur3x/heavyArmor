@@ -1,4 +1,4 @@
-window.addEventListener("error", e => {
+window.addEventListener("error", (e) => {
   const s = document.getElementById("status");
   if (s) {
     s.textContent =
@@ -11,11 +11,10 @@ window.addEventListener("error", e => {
   }
 });
 
-window.addEventListener("unhandledrejection", e => {
+window.addEventListener("unhandledrejection", (e) => {
   const s = document.getElementById("status");
   if (s) {
     s.textContent =
-      "Promise error:\n" +
-      (e.reason?.message || String(e.reason));
+      "Promise error:\n" + (e.reason?.message || String(e.reason));
   }
 });
