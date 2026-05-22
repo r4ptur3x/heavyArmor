@@ -259,8 +259,6 @@ async function loadRuleFiles() {
   return files;
 }
 
-
-
 function computeBounds(rows) {
   if (!rows.length)
     return {
@@ -584,7 +582,7 @@ async function renderRows(rows, sourceLabel) {
     tileGroup.add(obj);
     pickables.push(obj);
   }
- setStatus(
+  setStatus(
     buildRenderStatus({
       validCount: valid.length,
       sourceLabel,
@@ -611,7 +609,7 @@ async function renderRows(rows, sourceLabel) {
     }),
   );
 }
-  
+
 async function loadGoogleSheet() {
   try {
     updateCsvUrl();
@@ -630,9 +628,9 @@ async function loadGoogleSheet() {
         "Google returned HTML, not CSV. Check spreadsheet sharing, URL/ID, and map sheet name.",
       );
     await renderRows(
-  parseGridCSV(csv, DEFAULT_MODEL_COLOR),
-  "map sheet: " + currentSheetName,
-);
+      parseGridCSV(csv, DEFAULT_MODEL_COLOR),
+      "map sheet: " + currentSheetName,
+    );
   } catch (e) {
     setStatus(
       "Map load failed.\nSpreadsheet ID: " +
@@ -641,7 +639,7 @@ async function loadGoogleSheet() {
         currentSheetName +
         "\n" +
         (e.message || String(e)) +
-        "\nEmbedded map not auto-rendered. Click Render Embedded Data if needed.",
+        "\nNo map was rendered.",
     );
   }
 }
