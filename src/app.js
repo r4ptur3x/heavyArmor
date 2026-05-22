@@ -11,8 +11,6 @@ let CSV_URL = "";
 const RULE_MANIFEST_URL = "./rules/manifest.json";
 const TILE_SIZE = APP_CONFIG.TILE_SIZE;
 const DEFAULT_MODEL_COLOR = "#808080";
-const EMBEDDED_CSV =
-  '"warehouse, D99, 001","warehouse, D99, 001","warehouse, D99, 001","road, D99, 001","parking lot, D99, 001","parking lot, D99, 001","parking lot, D99, 001","kiosk, D99, 001","parking lot, D99, 001","parking lot, D99, 001"\n"parking lot, D99, 001","parking lot, D99, 001","road, D99, 001","road, D99, 001","parking lot, D99, 001","parking lot, D99, 001","parking lot, D99, 001","road, D99, 001","road, D99, 001","parking lot, D99, 001"\n"parking lot, D99, 001","parking lot, D99, 001","road, D99, 001","warehouse, D99, 001","warehouse, D99, 001","road, D99, 001","parking lot, D99, 001","parking lot, D99, 001","road, D99, 001","parking lot, D99, 001"';
 let tileRules = {};
 const colorByType = {};
 const typeColorOverrides = {};
@@ -838,9 +836,6 @@ function loadMapFromInput() {
   currentSheetName = name;
   loadGoogleSheet();
 }
-function renderEmbedded() {
-  renderRows(parseGridCSV(EMBEDDED_CSV), "embedded backup grid");
-}
 function getHit(event) {
   const rect = renderer.domElement.getBoundingClientRect();
   pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -982,9 +977,6 @@ async function main() {
 document
   .querySelector("#reloadButton")
   .addEventListener("click", loadGoogleSheet);
-document
-  .querySelector("#fallbackButton")
-  .addEventListener("click", renderEmbedded);
 loadMapButton.addEventListener("click", loadMapFromInput);
 mapNameInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") loadMapFromInput();
