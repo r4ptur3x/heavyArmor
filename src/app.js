@@ -746,50 +746,32 @@ async function renderRows(rows, sourceLabel) {
     tileGroup.add(obj);
     pickables.push(obj);
   }
-  setStatus(
-    "Rendered " +
-      valid.length +
-      " grid tiles from " +
-      sourceLabel +
-      ".\nSpreadsheet ID: " +
-      currentSpreadsheetId +
-      "\nCurrent map: " +
-      currentSheetName +
-      "\nApp version: " +
-      ASSET_VERSION +
-      "\nTile spacing: " +
-      TILE_SIZE +
-      " world units.\nWorld near clip: " +
-      getWorldNearClip() +
-      "\nShadow near clip: " +
-      getShadowNearClip() +
-      "\nDirection icon size: " +
-      getDirectionIconSize() +
-      "\nModel placement: raw imported scale, imported origin/pivot, no Y normalization.\nMap bounds: " +
-      lastMapBounds.width +
-      " x " +
-      lastMapBounds.depth +
-      "\nCoordinates shown as sheet positions starting at 1,1.\nDefault colors: " +
-      (defaultColorsEnabled ? "On" : "Off") +
-      "\nLighting angle: " +
-      getLightAngle() +
-      "° height: " +
-      getLightHeight() +
-      " intensity: " +
-      getLightIntensity() +
-      "\nShadows: " +
-      (shadowsEnabled ? "On" : "Off") +
-      "\nRules loaded from manifest: " +
-      Object.keys(tileRules).join(", ") +
-      "\nCache bust: " +
-      CACHE_BUST +
-      "\nModels: " +
-      modelCount +
-      " | Cubes: " +
-      cubeCount +
-      (failed.length ? "\nModel load failures:\n" + failed.join("\n") : ""),
+ setStatus(
+    buildRenderStatus({
+      validCount: valid.length,
+      sourceLabel,
+      currentSpreadsheetId,
+      currentSheetName,
+      assetVersion: ASSET_VERSION,
+      tileSize: TILE_SIZE,
+      worldNearClip: getWorldNearClip(),
+      shadowNearClip: getShadowNearClip(),
+      directionIconSize: getDirectionIconSize(),
+      modelPlacementText:
+        "Model placement: raw imported scale, imported origin/pivot, no Y normalization.",
+      mapBounds: lastMapBounds,
+      defaultColorsEnabled,
+      lightAngle: getLightAngle(),
+      lightHeight: getLightHeight(),
+      lightIntensity: getLightIntensity(),
+      shadowsEnabled,
+      ruleNames: Object.keys(tileRules),
+      cacheBust: CACHE_BUST,
+      modelCount,
+      cubeCount,
+      failed,
+    }),
   );
-}
 async function loadGoogleSheet() {
   try {
     updateCsvUrl();
