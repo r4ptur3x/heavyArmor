@@ -10,8 +10,9 @@ import { applyGenericRules, buildGrid } from "./rule-engine.js";
 import { getModelPrototype, tintObject } from "./model-loader.js";
 const ASSET_VERSION = APP_CONFIG.ASSET_VERSION;
 const CACHE_BUST = ASSET_VERSION + "-" + Date.now();
+const DEFAULT_MAP_SHEET_NAME = "room_Test";
 let currentSpreadsheetId = "1A4THHf9Z5o5iXKxSrT8IvJT8pWM1nj2QjyEOVV_jsPQ";
-let currentSheetName = "room_Test";
+let currentSheetName = DEFAULT_MAP_SHEET_NAME;
 let CSV_URL = "";
 const RULE_MANIFEST_URL = "./rules/manifest.json";
 const TILE_SIZE = APP_CONFIG.TILE_SIZE;
@@ -65,7 +66,6 @@ const viewport = document.querySelector("#viewport"),
   shadowNearClip = document.querySelector("#shadowNearClip"),
   shadowNearClipText = document.querySelector("#shadowNearClipText"),
   spreadsheetInput = document.querySelector("#spreadsheetInput"),
-  mapNameInput = document.querySelector("#mapNameInput"),
   loadMapButton = document.querySelector("#loadMapButton"),
   sourceUrlEl = document.querySelector("#sourceUrl");
 function applyConfigDefaultsToControls() {
@@ -586,20 +586,15 @@ async function loadGoogleSheet() {
   }
 }
 function loadMapFromInput() {
-  const id = extractSpreadsheetId(spreadsheetInput.value),
-    name = mapNameInput.value.trim();
+  const id = extractSpreadsheetId(spreadsheetInput.value);
   if (!id) {
     setStatus(
       "Enter a spreadsheet URL or ID first.\nApp version: " + ASSET_VERSION,
     );
     return;
   }
-  if (!name) {
-    setStatus("Enter a map sheet name first.\nApp version: " + ASSET_VERSION);
-    return;
-  }
   currentSpreadsheetId = id;
-  currentSheetName = name;
+  currentSheetName = DEFAULT_MAP_SHEET_NAME;
   loadGoogleSheet();
 }
 function getHit(event) {
@@ -716,9 +711,6 @@ document
   .querySelector("#reloadButton")
   .addEventListener("click", loadGoogleSheet);
 loadMapButton.addEventListener("click", loadMapFromInput);
-mapNameInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") loadMapFromInput();
-});
 spreadsheetInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") loadMapFromInput();
 });
