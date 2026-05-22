@@ -772,6 +772,8 @@ async function renderRows(rows, sourceLabel) {
       failed,
     }),
   );
+}
+  
 async function loadGoogleSheet() {
   try {
     updateCsvUrl();
