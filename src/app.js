@@ -78,6 +78,32 @@ function applyConfigDefaultsToControls() {
   if (directionIconSize)
     directionIconSize.value = APP_CONFIG.DEFAULT_DIRECTION_ICON_SIZE;
 }
+
+function getWorldNearClip() {
+  return Number(worldNearClip?.value || APP_CONFIG.DEFAULT_WORLD_NEAR_CLIP);
+}
+
+function getShadowNearClip() {
+  return Number(shadowNearClip?.value || APP_CONFIG.DEFAULT_SHADOW_NEAR_CLIP);
+}
+
+function getDirectionIconSize() {
+  return Number(
+    directionIconSize?.value || APP_CONFIG.DEFAULT_DIRECTION_ICON_SIZE,
+  );
+}
+
+function getLightAngle() {
+  return Number(lightAngle?.value || APP_CONFIG.DEFAULT_LIGHT_ANGLE);
+}
+
+function getLightHeight() {
+  return Number(lightHeight?.value || APP_CONFIG.DEFAULT_LIGHT_HEIGHT);
+}
+
+function getLightIntensity() {
+  return Number(lightIntensity?.value || APP_CONFIG.DEFAULT_LIGHT_INTENSITY);
+}
 document.querySelector("#assetVersionText").textContent = CACHE_BUST;
 versionBadge.textContent = "v " + ASSET_VERSION;
 function extractSpreadsheetId(value) {
@@ -129,9 +155,7 @@ function toggleDefaultColors() {
   );
 }
 function updateDirectionIconSize() {
-  const v = Number(
-    directionIconSize?.value || APP_CONFIG.DEFAULT_DIRECTION_ICON_SIZE,
-  );
+  const v = getDirectionIconSize();
   if (directionIconSizeText) directionIconSizeText.textContent = String(v);
   if (directionGroup) {
     directionGroup.traverse((n) => {
@@ -141,18 +165,16 @@ function updateDirectionIconSize() {
 }
 function updateWorldNearClip() {
   if (!camera) return;
-  const v = Number(worldNearClip?.value || APP_CONFIG.DEFAULT_WORLD_NEAR_CLIP);
+  const v = getWorldNearClip();
   camera.near = v;
   camera.updateProjectionMatrix();
   if (worldNearClipText) worldNearClipText.textContent = v.toFixed(2);
 }
 function updateLight() {
   if (!sun) return;
-  const angle = Number(lightAngle?.value || APP_CONFIG.DEFAULT_LIGHT_ANGLE),
-    height = Number(lightHeight?.value || APP_CONFIG.DEFAULT_LIGHT_HEIGHT),
-    intensity = Number(
-      lightIntensity?.value || APP_CONFIG.DEFAULT_LIGHT_INTENSITY,
-    );
+  const angle = getLightAngle(),
+    height = getLightHeight(),
+    intensity = getLightIntensity();
   const radius = Math.max(lastMapBounds.radius * 1.25, 12),
     rad = (angle * Math.PI) / 180;
   sun.position.set(
@@ -177,9 +199,7 @@ function configureShadows() {
   if (shadowsEnabled) {
     const pad = Math.max(6, lastMapBounds.radius * 0.35),
       half = Math.max(lastMapBounds.width, lastMapBounds.depth) / 2 + pad,
-      near = Number(
-        shadowNearClip?.value || APP_CONFIG.DEFAULT_SHADOW_NEAR_CLIP,
-      );
+      near = getShadowNearClip();
     sun.shadow.mapSize.set(4096, 4096);
     sun.shadow.radius = 8;
     sun.shadow.bias = -0.0001;
@@ -401,9 +421,7 @@ function updateSceneBounds(rows) {
     lastMapBounds.radius * 0.9 + 8,
     lastMapBounds.centerZ + dist,
   );
-  camera.near = Number(
-    worldNearClip?.value || APP_CONFIG.DEFAULT_WORLD_NEAR_CLIP,
-  );
+  camera.near = getWorldNearClip();
   camera.far = Math.max(1000, lastMapBounds.radius * 20);
   camera.updateProjectionMatrix();
   controls.update();
@@ -513,9 +531,7 @@ function createTextSprite(text) {
   const texture = new THREE.CanvasTexture(canvas);
   const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
   const sprite = new THREE.Sprite(material);
-  const size = Number(
-    directionIconSize?.value || APP_CONFIG.DEFAULT_DIRECTION_ICON_SIZE,
-  );
+  const size = getDirectionIconSize();
   sprite.scale.set(size, size, size);
   return sprite;
 }
@@ -552,12 +568,7 @@ function addDirectionMarkers() {
 function initScene() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x151515);
-  camera = new THREE.PerspectiveCamera(
-    55,
-    1,
-    Number(worldNearClip?.value || APP_CONFIG.DEFAULT_WORLD_NEAR_CLIP),
-    1000,
-  );
+  camera = new THREE.PerspectiveCamera(55, 1, getWorldNearClip(), 1000);
   camera.position.set(12, 11, 14);
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.shadowMap.enabled = true;
@@ -750,13 +761,11 @@ async function renderRows(rows, sourceLabel) {
       "\nTile spacing: " +
       TILE_SIZE +
       " world units.\nWorld near clip: " +
-      Number(worldNearClip?.value || APP_CONFIG.DEFAULT_WORLD_NEAR_CLIP) +
+      getWorldNearClip() +
       "\nShadow near clip: " +
-      Number(shadowNearClip?.value || APP_CONFIG.DEFAULT_SHADOW_NEAR_CLIP) +
+      getShadowNearClip() +
       "\nDirection icon size: " +
-      Number(
-        directionIconSize?.value || APP_CONFIG.DEFAULT_DIRECTION_ICON_SIZE,
-      ) +
+      getDirectionIconSize() +
       "\nModel placement: raw imported scale, imported origin/pivot, no Y normalization.\nMap bounds: " +
       lastMapBounds.width +
       " x " +
@@ -764,11 +773,11 @@ async function renderRows(rows, sourceLabel) {
       "\nCoordinates shown as sheet positions starting at 1,1.\nDefault colors: " +
       (defaultColorsEnabled ? "On" : "Off") +
       "\nLighting angle: " +
-      Number(lightAngle?.value || APP_CONFIG.DEFAULT_LIGHT_ANGLE) +
+      getLightAngle() +
       "° height: " +
-      Number(lightHeight?.value || APP_CONFIG.DEFAULT_LIGHT_HEIGHT) +
+      getLightHeight() +
       " intensity: " +
-      Number(lightIntensity?.value || APP_CONFIG.DEFAULT_LIGHT_INTENSITY) +
+      getLightIntensity() +
       "\nShadows: " +
       (shadowsEnabled ? "On" : "Off") +
       "\nRules loaded from manifest: " +
@@ -870,13 +879,11 @@ function onClick(e) {
       "\nTile spacing: " +
       TILE_SIZE +
       " world units.\nWorld near clip: " +
-      Number(worldNearClip?.value || APP_CONFIG.DEFAULT_WORLD_NEAR_CLIP) +
+      getWorldNearClip() +
       "\nShadow near clip: " +
-      Number(shadowNearClip?.value || APP_CONFIG.DEFAULT_SHADOW_NEAR_CLIP) +
+      getShadowNearClip() +
       "\nDirection icon size: " +
-      Number(
-        directionIconSize?.value || APP_CONFIG.DEFAULT_DIRECTION_ICON_SIZE,
-      ) +
+      getDirectionIconSize() +
       "\nModel placement: raw imported scale, imported origin/pivot, no Y normalization.\nDefault colors: " +
       (defaultColorsEnabled ? "On" : "Off") +
       "\nColor mode: " +
