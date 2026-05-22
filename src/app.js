@@ -1,7 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { APP_CONFIG } from "./config.js";
-import { buildRenderStatus } from "./status-builders.js";
+import {
+  buildRenderStatus,
+  buildSelectedTileStatus,
+} from "./status-builders.js";
 import { parseGridCSV } from "./csv-parser.js";
 import { applyGenericRules, buildGrid } from "./rule-engine.js";
 import { getModelPrototype, tintObject } from "./model-loader.js";
@@ -615,55 +618,27 @@ function onClick(e) {
   colorPicker.disabled = false;
   colorPicker.value = getDisplayColor(selectedType);
   const b = hit.userData.importedBounds;
+  const colorMode = typeColorOverrides[selectedType]
+    ? "picker override"
+    : defaultColorsEnabled
+      ? "json default color"
+      : "50% grey default";
   setStatus(
-    "Selected type: " +
-      selectedType +
-      "\nSheet X/Y: " +
-      hit.userData.sheetX +
-      ", " +
-      hit.userData.sheetY +
-      "\nInternal X/Y: " +
-      hit.userData.x +
-      ", " +
-      hit.userData.y +
-      "\nDamage: " +
-      hit.userData.damageToken +
-      "\nVariant: " +
-      hit.userData.variant +
-      "\nModel: " +
-      (hit.userData.modelBasePath || "cube") +
-      "\nApp version: " +
-      ASSET_VERSION +
-      "\nTile spacing: " +
-      TILE_SIZE +
-      " world units.\nWorld near clip: " +
-      getWorldNearClip() +
-      "\nShadow near clip: " +
-      getShadowNearClip() +
-      "\nDirection icon size: " +
-      getDirectionIconSize() +
-      "\nModel placement: raw imported scale, imported origin/pivot, no Y normalization.\nDefault colors: " +
-      (defaultColorsEnabled ? "On" : "Off") +
-      "\nColor mode: " +
-      (typeColorOverrides[selectedType]
-        ? "picker override"
-        : defaultColorsEnabled
-          ? "json default color"
-          : "50% grey default") +
-      "\nRule: " +
-      (hit.userData.rule || "") +
-      "\nRotationY: " +
-      Math.round(((hit.userData.rotationY || 0) * 180) / Math.PI) +
-      "°\nCache bust: " +
-      CACHE_BUST +
-      (b
-        ? "\nImported bounds X/Y/Z: " +
-          b.sourceX.toFixed(3) +
-          " / " +
-          b.sourceY.toFixed(3) +
-          " / " +
-          b.sourceZ.toFixed(3)
-        : ""),
+    buildSelectedTileStatus({
+      selectedType,
+      tile: hit.userData,
+      importedBounds: b,
+      assetVersion: ASSET_VERSION,
+      tileSize: TILE_SIZE,
+      worldNearClip: getWorldNearClip(),
+      shadowNearClip: getShadowNearClip(),
+      directionIconSize: getDirectionIconSize(),
+      modelPlacementText:
+        "Model placement: raw imported scale, imported origin/pivot, no Y normalization.",
+      defaultColorsEnabled,
+      colorMode,
+      cacheBust: CACHE_BUST,
+    }),
   );
 }
 function onPointerMove(e) {
