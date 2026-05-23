@@ -8,6 +8,7 @@ import {
 import { parseGridCSV } from "./csv-parser.js";
 import { applyGenericRules, buildGrid } from "./rule-engine.js";
 import { getModelPrototype, tintObject } from "./model-loader.js";
+import { createTileObjects } from "./tile-renderer.js";
 const ASSET_VERSION = APP_CONFIG.ASSET_VERSION;
 const CACHE_BUST = ASSET_VERSION + "-" + Date.now();
 const DEFAULT_MAP_SHEET_NAME = "room_Test";
@@ -338,12 +339,6 @@ function updateSceneBounds(rows) {
   updateLight();
   updateWorldNearClip();
 }
-function colorFor(label, color) {
-  const key = String(label || "")
-    .trim()
-    .toLowerCase();
-  return getDisplayColor(key);
-}
 
 function createTextSprite(text) {
   const canvas = document.createElement("canvas");
@@ -442,9 +437,6 @@ function resize() {
   camera.updateProjectionMatrix();
   renderer.setSize(w, h);
 }
-function applyTypeColorIfOverridden(obj, type) {
-  tintObject(obj, getDisplayColor(type));
-}
 function clearTiles() {
   while (tileGroup.children.length) tileGroup.remove(tileGroup.children[0]);
   pickables = [];
@@ -460,67 +452,19 @@ async function renderRows(rows, sourceLabel) {
   );
   updateSceneBounds(valid);
   const grid = buildGrid(valid);
-  let modelCount = 0,
-    cubeCount = 0,
-    failed = [];
-  for (const r of valid) {
-    let obj = null;
-    const ruleDef = tileRules[r.label];
-    let modelInfo = applyGenericRules(ruleDef, grid, r.x, r.y, r.label);
-    if (modelInfo.basePath) {
-      try {
-        const proto = await getModelPrototype(
-          modelInfo.basePath,
-          versioned,
-          DEFAULT_MODEL_COLOR,
-        );
-        obj = proto.clone(true);
-        obj.rotation.y += modelInfo.rotationY;
-        applyTypeColorIfOverridden(obj, r.label);
-        modelCount++;
-      } catch (e) {
-        failed.push(r.label + " " + modelInfo.basePath + ": " + e.message);
-      }
-    }
-    if (!obj) {
-      const h = r.height || 1;
-      obj = new THREE.Mesh(
-        new THREE.BoxGeometry(TILE_SIZE, h, TILE_SIZE),
-        new THREE.MeshStandardMaterial({
-          color: new THREE.Color(colorFor(r.label, r.color)),
-          roughness: 0.58,
-          metalness: 0.06,
-          side: THREE.DoubleSide,
-        }),
-      );
-      obj.position.y = h / 2;
-      applyTypeColorIfOverridden(obj, r.label);
-      cubeCount++;
-    }
-    obj.position.x += r.x * TILE_SIZE;
-    obj.position.z += r.y * TILE_SIZE;
-    const importedBounds = obj.userData.importedBounds || null;
-    obj.userData = {
-      ...r,
-      type: r.label,
-      root: obj,
-      modelBasePath: modelInfo.basePath || "cube",
-      rule: modelInfo.rule,
-      rotationY: modelInfo.rotationY,
-      importedBounds: importedBounds,
-    };
-    if (obj.traverse)
-      obj.traverse((n) => {
-        n.userData = {
-          ...r,
-          type: r.label,
-          root: obj,
-          modelBasePath: modelInfo.basePath || "cube",
-          rule: modelInfo.rule,
-          rotationY: modelInfo.rotationY,
-          importedBounds: importedBounds,
-        };
-      });
+  const tileResult = await createTileObjects({
+    rows: valid,
+    grid,
+    tileRules,
+    tileSize: TILE_SIZE,
+    defaultModelColor: DEFAULT_MODEL_COLOR,
+    versioned,
+    getModelPrototype,
+    getDisplayColor,
+    applyGenericRules,
+    tintObject,
+  });
+  for (const obj of tileResult.objects) {
     tileGroup.add(obj);
     pickables.push(obj);
   }
@@ -545,9 +489,9 @@ async function renderRows(rows, sourceLabel) {
       shadowsEnabled,
       ruleNames: Object.keys(tileRules),
       cacheBust: CACHE_BUST,
-      modelCount,
-      cubeCount,
-      failed,
+      modelCount: tileResult.modelCount,
+      cubeCount: tileResult.cubeCount,
+      failed: tileResult.failed,
     }),
   );
 }
