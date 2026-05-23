@@ -21,6 +21,26 @@ door, D99, 001
 window, D99, 001
 ```
 
+## CSV Export Rule
+
+Because each map cell value contains commas, CSV exports must quote every cell value.
+
+Correct CSV cell export:
+
+```csv
+"wall, D99, 001","floor, D99, 001"
+```
+
+Incorrect CSV cell export:
+
+```csv
+wall, D99, 001,floor, D99, 001
+```
+
+The incorrect format creates extra columns because the commas inside each cell are treated as CSV delimiters.
+
+When exporting CSV, each tile cell should be serialized as one quoted field containing the full viewer cell value.
+
 ## Design Principle
 
 The map generator owns authoring logic.
@@ -214,6 +234,8 @@ GPT can help choose what belongs in a room. The generator should decide where it
 
 The first output target should be CSV or a generated 2D array using the existing cell format.
 
+CSV files must quote each cell value because the viewer cell values contain commas.
+
 Later, the generator can write directly to a Google Sheet tab.
 
 Recommended first output tab name:
@@ -236,6 +258,7 @@ Create a small generator that can:
 6. Add windows on exterior walls.
 7. Place required items like a McGuffin, keypad, lever, or stairs.
 8. Export the grid in Google Sheet-compatible cell format.
+9. Quote every CSV cell value during CSV export.
 
 ## Later Milestones
 
