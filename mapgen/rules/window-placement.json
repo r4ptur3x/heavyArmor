@@ -1,0 +1,9 @@
+{
+  "type": "windowPlacement",
+  "allowedReplacementTile": "wall",
+  "windowTile": "window",
+  "maxAdjacentRun": 2,
+  "allowHorizontalRuns": true,
+  "allowVerticalRuns": true,
+  "description": "Windows replace wall tiles. Window runs may be one or two tiles long, but never three or more consecutively in horizontal or vertical directions."
+}
