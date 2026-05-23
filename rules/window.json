@@ -8,6 +8,30 @@
   },
   "rules": [
     {
+      "name": "window aligned north/south",
+      "requires": [],
+      "requiresAnyType": [
+        {
+          "direction": "N",
+          "types": ["wall", "window"]
+        }
+      ],
+      "model": "default",
+      "rotationDegrees": 90
+    },
+    {
+      "name": "window aligned north/south",
+      "requires": [],
+      "requiresAnyType": [
+        {
+          "direction": "S",
+          "types": ["wall", "window"]
+        }
+      ],
+      "model": "default",
+      "rotationDegrees": 90
+    },
+    {
       "name": "window default",
       "requires": [],
       "model": "default",
