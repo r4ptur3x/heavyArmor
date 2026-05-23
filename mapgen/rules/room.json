@@ -9,5 +9,15 @@
   "mergeAdjacentDoors": true,
   "minimumDoors": 1,
   "allowWindows": true,
-  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Adjacent rooms may share a single wall tile line instead of creating double walls. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door. Every room must have at least one door."
+  "sharedWallBehavior": {
+    "description": "When two rooms touch, their bordering wall lines must collapse into one shared wall line. Do not create two adjacent parallel wall rows or columns between touching rooms.",
+    "maxSharedWallThicknessTiles": 1,
+    "collapseDoubleWalls": true
+  },
+  "sharedDoorBehavior": {
+    "description": "When doors from adjacent rooms would occupy neighboring or overlapping positions on a shared wall, collapse them into one shared door tile in the single shared wall line.",
+    "collapseAdjacentDoors": true,
+    "maxSharedDoorThicknessTiles": 1
+  },
+  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Adjacent rooms may share a single wall tile line instead of creating double walls. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
 }
