@@ -2,6 +2,21 @@
 
 Load this file before helping create or edit Heavy Armor maps.
 
+This file is the bootstrap file for map-generation work. After loading it, load the additional rule and reference files listed in the bootstrap checklist below.
+
+## Bootstrap Checklist
+
+When initializing a fresh chat for Heavy Armor map generation, do the following:
+
+1. Load this file first.
+2. Load `mapgen/mapgen-design.md` next. Treat it as the current design reference for map-generation architecture.
+3. If `mapgen/catalogs/default-assets.json` exists, load it before choosing asset types, damage values, variants, or special item names.
+4. If `mapgen/example-map-spec.json` exists, load it as the current example format for new map specs.
+5. If `mapgen/generate-map.mjs` exists, load it before editing map specs or generator behavior so outputs match the current generator.
+6. If the user asks about current viewer behavior, fetch relevant files from `src/` on `main` before answering or editing.
+
+If one of these files does not exist yet, say so briefly and continue using the available files.
+
 ## Project Context
 
 This repository contains the Heavy Armor 3D Viewer, a Three.js app that renders maps from a Google Sheet grid.
@@ -53,16 +68,26 @@ user request
   -> existing Heavy Armor viewer
 ```
 
-## Files To Check
+## Rule File Loading Order
 
-When working on map generation, load these files if available:
+Use this loading order for map-generation work:
 
 ```text
-mapgen/mapgen-design.md
-mapgen/GPT-MAPGEN-INSTRUCTIONS.md
-mapgen/example-map-spec.json
-mapgen/catalogs/default-assets.json
-mapgen/generate-map.mjs
+1. mapgen/GPT-MAPGEN-INSTRUCTIONS.md
+2. mapgen/mapgen-design.md
+3. mapgen/catalogs/default-assets.json
+4. mapgen/example-map-spec.json
+5. mapgen/generate-map.mjs
+```
+
+Expected roles:
+
+```text
+GPT-MAPGEN-INSTRUCTIONS.md = bootstrap and workflow rules
+mapgen-design.md = architecture and design intent
+default-assets.json = valid asset types and defaults
+example-map-spec.json = example map source structure
+generate-map.mjs = current compiler behavior
 ```
 
 Some of these may not exist yet.
