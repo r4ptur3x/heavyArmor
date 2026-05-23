@@ -1,0 +1,5 @@
+{
+  "type": "scale",
+  "tileSizeFeet": 10,
+  "description": "Each map tile represents a 10 foot by 10 foot square. A 20x20 tile map represents 200 feet by 200 feet."
+}
