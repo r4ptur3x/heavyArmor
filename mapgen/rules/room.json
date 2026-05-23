@@ -3,7 +3,9 @@
   "shape": "rectangle",
   "interiorTile": "floor",
   "perimeterTile": "wall",
+  "wallThicknessTiles": 1,
+  "allowSharedWalls": true,
   "minimumDoors": 1,
   "allowWindows": true,
-  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Every room must have at least one door."
+  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the room footprint and may be shared between adjacent rooms. Every room must have at least one door."
 }
