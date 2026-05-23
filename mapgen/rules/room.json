@@ -19,6 +19,13 @@
     "maxOuterWallThicknessTiles": 1,
     "collapseDoubleOuterWalls": true
   },
+  "enclosureBehavior": {
+    "description": "All generated floor tiles must be enclosed by the final outer wall boundary. The exterior edge of the generated room group should be wall or door tiles, not floor tiles. Internal shared wall seams must remain continuous except where intentionally replaced by a single collapsed door tile.",
+    "allFloorsMustBeInsideOuterWalls": true,
+    "allowFloorOnExteriorBoundary": false,
+    "preserveInternalWallSeams": true,
+    "allowInternalWallBreaksOnlyForDoors": true
+  },
   "collapsedBoundaryFloorBehavior": {
     "description": "When wall rows or columns collapse during room packing, any affected floor rows or columns must remain inside the final room or packed room group. Do not leave a free row or column of floor tiles outside the final outer wall boundary.",
     "floorsMustRemainInsideOuterWalls": true,
@@ -30,5 +37,5 @@
     "collapseAdjacentDoors": true,
     "maxSharedDoorThicknessTiles": 1
   },
-  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Adjacent rooms may share a single wall tile line instead of creating double walls. Outer boundaries may not become double walls. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
+  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Adjacent rooms may share a single wall tile line instead of creating double walls. Outer boundaries may not become double walls or exterior floor rows. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. Internal wall seams should remain continuous except for intentional single-door openings. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
 }
