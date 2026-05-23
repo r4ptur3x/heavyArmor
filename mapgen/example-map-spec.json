@@ -1,0 +1,22 @@
+{
+  "name": "room_Generated_Test",
+  "description": "First map-generation test: fixed 20x20 map with floor by default and walls around the outer edge.",
+  "grid": {
+    "mode": "fixed",
+    "width": 20,
+    "height": 20
+  },
+  "defaults": {
+    "damage": "D99",
+    "variant": "001",
+    "fill": {
+      "assetType": "floor"
+    },
+    "edge": {
+      "assetType": "wall"
+    }
+  },
+  "rooms": [],
+  "connections": [],
+  "contents": []
+}
