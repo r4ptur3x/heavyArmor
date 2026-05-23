@@ -6,9 +6,11 @@
   "models": {
     "default": "./models/SM_wall_001a",
     "tee": "./models/SM_wall_001b",
-    "corner": "./models/SM_wall_001c"
+    "corner": "./models/SM_wall_001c",
+    "cross": "./models/SM_wall_001d"
   },
   "rules": [
+    { "name": "cross north south east west", "requiresAnyType": [{"direction":"N","types":["wall","door","window"]},{"direction":"S","types":["wall","door","window"]},{"direction":"E","types":["wall","door","window"]},{"direction":"W","types":["wall","door","window"]}], "model": "cross", "rotationDegrees": 0 },
     { "name": "tee north west east", "requiresAnyType": [{"direction":"N","types":["wall","door","window"]},{"direction":"W","types":["wall","door","window"]},{"direction":"E","types":["wall","door","window"]}], "model": "tee", "rotationDegrees": 180 },
     { "name": "tee south west east", "requiresAnyType": [{"direction":"S","types":["wall","door","window"]},{"direction":"W","types":["wall","door","window"]},{"direction":"E","types":["wall","door","window"]}], "model": "tee", "rotationDegrees": 0 },
     { "name": "tee north south west", "requiresAnyType": [{"direction":"N","types":["wall","door","window"]},{"direction":"S","types":["wall","door","window"]},{"direction":"W","types":["wall","door","window"]}], "model": "tee", "rotationDegrees": 270 },
