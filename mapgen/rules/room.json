@@ -1,0 +1,9 @@
+{
+  "type": "room",
+  "shape": "rectangle",
+  "interiorTile": "floor",
+  "perimeterTile": "wall",
+  "minimumDoors": 1,
+  "allowWindows": true,
+  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Every room must have at least one door."
+}
