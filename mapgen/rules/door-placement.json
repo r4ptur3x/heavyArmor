@@ -4,5 +4,10 @@
   "replaceTile": "wall",
   "placementStrategy": "randomWallNonCorner",
   "minimumDoorsPerRoom": 1,
-  "description": "Doors are created by replacing non-corner wall tiles with door tiles. Every room must have at least one door."
+  "collapseBehavior": {
+    "collapseMultipleDoorsOnSharedWall": true,
+    "collapsedDoorCount": 1,
+    "description": "When a shared wall is created by collapsing adjacent room walls, any multiple door locations on that collapsed wall should resolve into one shared door location. Do not leave adjacent or duplicate doors on the same collapsed wall segment."
+  },
+  "description": "Doors are created by replacing non-corner wall tiles with door tiles. Every room must have at least one door. When walls collapse into one shared wall, multiple doors on that shared wall collapse into one door location."
 }
