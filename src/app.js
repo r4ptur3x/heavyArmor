@@ -14,6 +14,8 @@ const CACHE_BUST = ASSET_VERSION + "-" + Date.now();
 const DEFAULT_MAP_SHEET_NAME = "room_Test";
 let currentSpreadsheetId = "1A4THHf9Z5o5iXKxSrT8IvJT8pWM1nj2QjyEOVV_jsPQ";
 let currentSheetName = DEFAULT_MAP_SHEET_NAME;
+let currentMapSourceType = "googleSheet";
+let currentCsvSource = "";
 let CSV_URL = "";
 const RULE_MANIFEST_URL = "./rules/manifest.json";
 const TILE_SIZE = APP_CONFIG.TILE_SIZE;
@@ -114,12 +116,40 @@ function extractSpreadsheetId(value) {
   if (match) return match[1];
   return v.replace(/[#?].*$/, "").trim();
 }
+function isCsvSource(value) {
+  const v = String(value || "").trim();
+  return /\.csv(?:$|[?#])/i.test(v);
+}
+function normalizeCsvSource(value) {
+  const v = String(value || "").trim();
+  if (!v) return "";
+  const githubBlobMatch = v.match(
+    /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+\.csv)(?:[?#].*)?$/i,
+  );
+  if (githubBlobMatch) {
+    return (
+      "https://raw.githubusercontent.com/" +
+      githubBlobMatch[1] +
+      "/" +
+      githubBlobMatch[2] +
+      "/" +
+      githubBlobMatch[3] +
+      "/" +
+      githubBlobMatch[4]
+    );
+  }
+  return v;
+}
 function updateCsvUrl() {
-  CSV_URL =
-    "https://docs.google.com/spreadsheets/d/" +
-    currentSpreadsheetId +
-    "/gviz/tq?tqx=out:csv&sheet=" +
-    encodeURIComponent(currentSheetName);
+  if (currentMapSourceType === "csv") {
+    CSV_URL = currentCsvSource;
+  } else {
+    CSV_URL =
+      "https://docs.google.com/spreadsheets/d/" +
+      currentSpreadsheetId +
+      "/gviz/tq?tqx=out:csv&sheet=" +
+      encodeURIComponent(currentSheetName);
+  }
   sourceUrlEl.textContent = CSV_URL;
 }
 updateCsvUrl();
@@ -498,6 +528,7 @@ async function renderRows(rows, sourceLabel) {
 
 async function loadGoogleSheet() {
   try {
+    currentMapSourceType = "googleSheet";
     updateCsvUrl();
     setStatus(
       "Loading spreadsheet: " +
@@ -529,16 +560,57 @@ async function loadGoogleSheet() {
     );
   }
 }
+async function loadRawCsv() {
+  try {
+    currentMapSourceType = "csv";
+    updateCsvUrl();
+    setStatus("Loading CSV map: " + CSV_URL + "...");
+    const res = await fetch(CSV_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.status + " " + res.statusText);
+    const csv = await res.text();
+    if (csv.trim().startsWith("<"))
+      throw new Error("Source returned HTML, not CSV. Check the CSV URL/path.");
+    await renderRows(parseGridCSV(csv, DEFAULT_MODEL_COLOR), "CSV: " + CSV_URL);
+  } catch (e) {
+    setStatus(
+      "CSV map load failed.\nCSV source: " +
+        CSV_URL +
+        "\n" +
+        (e.message || String(e)) +
+        "\nNo map was rendered.",
+    );
+  }
+}
+function loadCurrentMapSource() {
+  if (currentMapSourceType === "csv") loadRawCsv();
+  else loadGoogleSheet();
+}
 function loadMapFromInput() {
-  const id = extractSpreadsheetId(spreadsheetInput.value);
+  const rawValue = String(spreadsheetInput.value || "").trim();
+  if (!rawValue) {
+    setStatus(
+      "Enter a spreadsheet URL/ID or CSV URL/path first.\nApp version: " +
+        ASSET_VERSION,
+    );
+    return;
+  }
+  if (isCsvSource(rawValue)) {
+    currentCsvSource = normalizeCsvSource(rawValue);
+    currentMapSourceType = "csv";
+    loadRawCsv();
+    return;
+  }
+  const id = extractSpreadsheetId(rawValue);
   if (!id) {
     setStatus(
-      "Enter a spreadsheet URL or ID first.\nApp version: " + ASSET_VERSION,
+      "Enter a spreadsheet URL/ID or CSV URL/path first.\nApp version: " +
+        ASSET_VERSION,
     );
     return;
   }
   currentSpreadsheetId = id;
   currentSheetName = DEFAULT_MAP_SHEET_NAME;
+  currentMapSourceType = "googleSheet";
   loadGoogleSheet();
 }
 function getHit(event) {
@@ -639,7 +711,7 @@ async function main() {
     applyConfigDefaultsToControls();
     initScene();
     await loadRuleFiles();
-    await loadGoogleSheet();
+    await loadCurrentMapSource();
     animate();
   } catch (e) {
     setStatus(
@@ -653,7 +725,7 @@ async function main() {
 }
 document
   .querySelector("#reloadButton")
-  .addEventListener("click", loadGoogleSheet);
+  .addEventListener("click", loadCurrentMapSource);
 loadMapButton.addEventListener("click", loadMapFromInput);
 spreadsheetInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") loadMapFromInput();
