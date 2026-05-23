@@ -46,6 +46,24 @@ damage = D99 / D60 / D20 / etc.
 variant = 001 / 002 / etc.
 ```
 
+## CSV Export Rule
+
+When generating CSV map files, every cell value must be quoted because the cell values themselves contain commas.
+
+Correct:
+
+```csv
+"wall, D99, 001","floor, D99, 001"
+```
+
+Incorrect:
+
+```csv
+wall, D99, 001,floor, D99, 001
+```
+
+The incorrect format causes spreadsheet programs to split each tile into multiple columns.
+
 ## Goal
 
 Help the user describe a map in natural language, then convert that request into a structured map spec JSON file.
@@ -238,6 +256,8 @@ Prefer generating or targeting a test sheet/tab name such as:
 room_Generated_Test
 ```
 
+CSV map outputs must quote every cell value.
+
 ## First Implementation Target
 
 The first generator should:
@@ -250,6 +270,7 @@ The first generator should:
 6. Add windows.
 7. Place required items.
 8. Export cells as `<asset type>, <damage>, <variant>`.
+9. Quote every CSV cell value during CSV export.
 
 ## Editing Rules For GPT
 
