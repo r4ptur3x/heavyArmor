@@ -1,25 +1,33 @@
 {
   "type": "roomSize",
   "unit": "tiles",
-  "measurement": "area",
-  "description": "Named room sizes are based on total tile area. A room's area is width times height in tiles.",
+  "measurement": "interiorFloorArea",
+  "description": "Named room sizes are based on interior floor tile area only. Wall perimeter tiles are added around the floor area and do not count toward the room size band.",
   "sizes": {
     "small": {
-      "minAreaTiles": 9,
-      "maxAreaTiles": 12
+      "minInteriorFloorAreaTiles": 9,
+      "maxInteriorFloorAreaTiles": 12
     },
     "medium": {
-      "minAreaTiles": 12,
-      "maxAreaTiles": 20
+      "minInteriorFloorAreaTiles": 12,
+      "maxInteriorFloorAreaTiles": 20
     },
     "large": {
-      "minAreaTiles": 20,
-      "maxAreaTiles": 30
+      "minInteriorFloorAreaTiles": 20,
+      "maxInteriorFloorAreaTiles": 30
     }
+  },
+  "wallPadding": {
+    "north": 1,
+    "east": 1,
+    "south": 1,
+    "west": 1
   },
   "notes": [
     "Area bands are inclusive for now.",
     "If a boundary value appears in two bands, prefer the smaller named size unless the user explicitly asks otherwise.",
-    "Examples: 3x3 is small because it is 9 tiles. 3x4 is small because it is 12 tiles. 4x5 is medium because it is 20 tiles. 5x6 is large because it is 30 tiles."
+    "A 3x3 small room means 3x3 floor tiles plus one wall tile on all sides, for a total footprint of 5x5 tiles.",
+    "Examples: 3x3 floor area is small because it has 9 floor tiles. 3x4 floor area is small because it has 12 floor tiles. 4x5 floor area is medium because it has 20 floor tiles. 5x6 floor area is large because it has 30 floor tiles.",
+    "Wall tiles are not counted as floor area."
   ]
 }
