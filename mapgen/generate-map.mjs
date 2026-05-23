@@ -57,6 +57,52 @@ function buildFixedBaseGrid(spec) {
   );
 }
 
+function wouldCreateWindowRun(grid, x, y, dx, dy, windowCell) {
+  let count = 1;
+  for (const direction of [-1, 1]) {
+    let cx = x + dx * direction;
+    let cy = y + dy * direction;
+    while (grid[cy]?.[cx] === windowCell) {
+      count++;
+      cx += dx * direction;
+      cy += dy * direction;
+    }
+  }
+  return count > 2;
+}
+
+function placeWindow(grid, x, y, windowCell, orientation) {
+  const dx = orientation === "horizontal" ? 1 : 0;
+  const dy = orientation === "vertical" ? 1 : 0;
+  if (wouldCreateWindowRun(grid, x, y, dx, dy, windowCell)) return false;
+  grid[y][x] = windowCell;
+  return true;
+}
+
+function applyWindows(grid, spec) {
+  const windows = Array.isArray(spec.windows) ? spec.windows : [];
+  if (!windows.length) return;
+  const defaults = spec.defaults || {};
+  const edgeCell = tileToCell(defaults.edge || { assetType: "wall" }, defaults);
+  const windowCell = tileToCell({ assetType: "window" }, defaults);
+  const width = grid[0]?.length || 0;
+  const height = grid.length;
+
+  for (const windowSpec of windows) {
+    for (const point of windowSpec.positions || []) {
+      const x = Number(point.x);
+      const y = Number(point.y);
+      if (!Number.isInteger(x) || !Number.isInteger(y)) continue;
+      if (grid[y]?.[x] !== edgeCell) continue;
+      const isNorthOrSouth = y === 0 || y === height - 1;
+      const isEastOrWest = x === 0 || x === width - 1;
+      if (!isNorthOrSouth && !isEastOrWest) continue;
+      const orientation = isNorthOrSouth ? "horizontal" : "vertical";
+      placeWindow(grid, x, y, windowCell, orientation);
+    }
+  }
+}
+
 function resolveOutputPath(spec) {
   const mapName = sanitizeFileName(spec.name);
   const outputFolder = spec.output?.folder || "maps";
@@ -74,6 +120,7 @@ function main() {
   }
 
   const grid = buildFixedBaseGrid(spec);
+  applyWindows(grid, spec);
   const csv = gridToCsv(grid);
   const outputPath = resolveOutputPath(spec);
 
