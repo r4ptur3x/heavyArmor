@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+const TILE_SIZE_FEET = 10;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, "..");
@@ -34,6 +35,16 @@ function pickRandom(items, random) {
   return items[Math.floor(random() * items.length)];
 }
 
+function feetToTiles(feet) {
+  return Math.max(1, Math.ceil(Number(feet) / TILE_SIZE_FEET));
+}
+
+function dimensionToTiles(tileValue, feetValue, fallbackValue) {
+  if (tileValue !== undefined) return Number(tileValue);
+  if (feetValue !== undefined) return feetToTiles(feetValue);
+  return fallbackValue;
+}
+
 function tileToCell(tile, defaults) {
   const assetType = tile?.assetType || "floor";
   const damage = tile?.damage || defaults.damage || "D99";
@@ -60,13 +71,13 @@ function getCells(spec) {
 }
 
 function buildFixedBaseGrid(spec) {
-  const width = Number(spec.grid?.width || 20);
-  const height = Number(spec.grid?.height || 20);
+  const width = dimensionToTiles(spec.grid?.width, spec.grid?.widthFeet, 20);
+  const height = dimensionToTiles(spec.grid?.height, spec.grid?.heightFeet, 20);
   if (!Number.isInteger(width) || width <= 0) {
-    throw new Error(`Invalid grid width: ${spec.grid?.width}`);
+    throw new Error(`Invalid grid width: ${spec.grid?.width ?? spec.grid?.widthFeet}`);
   }
   if (!Number.isInteger(height) || height <= 0) {
-    throw new Error(`Invalid grid height: ${spec.grid?.height}`);
+    throw new Error(`Invalid grid height: ${spec.grid?.height ?? spec.grid?.heightFeet}`);
   }
 
   const cells = getCells(spec);
@@ -81,10 +92,10 @@ function buildFixedBaseGrid(spec) {
 
 function getRoomBounds(room, fallbackWidth, fallbackHeight) {
   return {
-    x: Number(room.x ?? 0),
-    y: Number(room.y ?? 0),
-    width: Number(room.width ?? fallbackWidth),
-    height: Number(room.height ?? fallbackHeight),
+    x: dimensionToTiles(room.x, room.xFeet, 0),
+    y: dimensionToTiles(room.y, room.yFeet, 0),
+    width: dimensionToTiles(room.width, room.widthFeet, fallbackWidth),
+    height: dimensionToTiles(room.height, room.heightFeet, fallbackHeight),
   };
 }
 
@@ -185,8 +196,8 @@ function applyWindows(grid, spec) {
 
   for (const windowSpec of windows) {
     for (const point of windowSpec.positions || []) {
-      const x = Number(point.x);
-      const y = Number(point.y);
+      const x = dimensionToTiles(point.x, point.xFeet, NaN);
+      const y = dimensionToTiles(point.y, point.yFeet, NaN);
       if (!Number.isInteger(x) || !Number.isInteger(y)) continue;
       if (grid[y]?.[x] !== cells.wall) continue;
       const isNorthOrSouth = y === 0 || y === height - 1;
