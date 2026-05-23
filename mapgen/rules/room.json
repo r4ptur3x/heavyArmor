@@ -19,10 +19,16 @@
     "maxOuterWallThicknessTiles": 1,
     "collapseDoubleOuterWalls": true
   },
+  "collapsedBoundaryFloorBehavior": {
+    "description": "When wall rows or columns collapse during room packing, any affected floor rows or columns must remain inside the final room or packed room group. Do not leave a free row or column of floor tiles outside the final outer wall boundary.",
+    "floorsMustRemainInsideOuterWalls": true,
+    "allowExteriorFreeFloorRows": false,
+    "allowExteriorFreeFloorColumns": false
+  },
   "sharedDoorBehavior": {
     "description": "When doors from adjacent rooms would occupy neighboring or overlapping positions on a shared wall, collapse them into one shared door tile in the single shared wall line.",
     "collapseAdjacentDoors": true,
     "maxSharedDoorThicknessTiles": 1
   },
-  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Adjacent rooms may share a single wall tile line instead of creating double walls. Outer boundaries may not become double walls. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
+  "description": "Rooms are rectangular areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Adjacent rooms may share a single wall tile line instead of creating double walls. Outer boundaries may not become double walls. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
 }
