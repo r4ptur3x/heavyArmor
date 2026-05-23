@@ -1,0 +1,8 @@
+{
+  "type": "doorPlacement",
+  "doorTile": "door",
+  "replaceTile": "wall",
+  "placementStrategy": "randomWallNonCorner",
+  "minimumDoorsPerRoom": 1,
+  "description": "Doors are created by replacing non-corner wall tiles with door tiles. Every room must have at least one door."
+}
