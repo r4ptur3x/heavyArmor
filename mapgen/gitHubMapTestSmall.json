@@ -1,0 +1,25 @@
+{
+  "name": "gitHubMapTestSmall",
+  "output": {
+    "folder": "maps"
+  },
+  "description": "Small generator test: fixed 10x10 map with floor by default and walls around the outer edge.",
+  "grid": {
+    "mode": "fixed",
+    "width": 10,
+    "height": 10
+  },
+  "defaults": {
+    "damage": "D99",
+    "variant": "001",
+    "fill": {
+      "assetType": "floor"
+    },
+    "edge": {
+      "assetType": "wall"
+    }
+  },
+  "rooms": [],
+  "connections": [],
+  "contents": []
+}
