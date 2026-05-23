@@ -49,17 +49,36 @@ The 3D viewer owns rendering logic.
 
 This means the generator can understand rooms, doors, keypads, levers, stairs, special items, and procedural placement, but the final output should still be a simple grid of sheet cells that the current app can read.
 
+## Generator Workflow
+
+The intended workflow is:
+
+```text
+user request
+  -> GPT interprets request using map-generation rules
+  -> generator logic creates grid
+  -> generator exports CSV directly into maps/
+  -> viewer loads CSV map
+```
+
+The long-term goal is to avoid accumulating one-off JSON spec files for every generated map.
+
+Small reusable rule/config files are acceptable, but generated playable maps should primarily exist as CSV outputs in:
+
+```text
+maps/
+```
+
 ## Source Format
 
-Map source files should use JSON because it is structured, easy for GPT to edit, and easy for JavaScript to read.
+Generator rules and reusable configuration data may still use JSON because it is structured, easy for GPT to edit, and easy for JavaScript to read.
 
-A map spec should describe intent instead of every final tile by hand.
+However, generated maps themselves should generally be emitted directly as CSV outputs instead of storing temporary per-map JSON files.
 
 Example concepts:
 
 ```json
 {
-  "name": "room_Generated_Test",
   "grid": {
     "mode": "fixed",
     "width": 20,
@@ -69,36 +88,7 @@ Example concepts:
   "defaults": {
     "damage": "D99",
     "variant": "001"
-  },
-  "rooms": [
-    {
-      "id": "entry",
-      "type": "entry",
-      "size": "small"
-    },
-    {
-      "id": "lab",
-      "type": "laboratory",
-      "size": "large",
-      "contents": [
-        {
-          "id": "main_mcguffin",
-          "assetType": "mcguffin",
-          "placement": "center"
-        }
-      ]
-    }
-  ],
-  "connections": [
-    {
-      "id": "entry_to_lab",
-      "type": "door",
-      "from": "entry",
-      "to": "lab",
-      "locked": true,
-      "openedBy": "entry_lever"
-    }
-  ]
+  }
 }
 ```
 
@@ -160,7 +150,7 @@ Rooms may also provide exact dimensions later.
 
 ## Doors and Controls
 
-Doors should be treated as first-class map entities in the source JSON, even though they compile down to tile cells.
+Doors should be treated as first-class generator entities even though they compile down to tile cells.
 
 This allows special logic like:
 
@@ -236,29 +226,27 @@ The first output target should be CSV or a generated 2D array using the existing
 
 CSV files must quote each cell value because the viewer cell values contain commas.
 
-Later, the generator can write directly to a Google Sheet tab.
-
-Recommended first output tab name:
+Generated maps should be written directly into:
 
 ```text
-room_Generated_Test
+maps/
 ```
 
-Do not overwrite the working `room_Test` tab until the generator is trusted.
+Do not overwrite the working `room_Test` Google Sheet until the generator is trusted.
 
 ## First Milestone
 
 Create a small generator that can:
 
-1. Read one JSON map spec.
-2. Create a fixed 20x20 grid.
-3. Fill it with default floor.
-4. Add room walls.
-5. Add doors between rooms.
-6. Add windows on exterior walls.
-7. Place required items like a McGuffin, keypad, lever, or stairs.
-8. Export the grid in Google Sheet-compatible cell format.
-9. Quote every CSV cell value during CSV export.
+1. Generate a fixed-size grid.
+2. Fill it with default floor.
+3. Add room walls.
+4. Add doors between rooms.
+5. Add windows on exterior walls.
+6. Place required items like a McGuffin, keypad, lever, or stairs.
+7. Export the grid in Google Sheet-compatible CSV format.
+8. Quote every CSV cell value during export.
+9. Write generated maps directly into `maps/`.
 
 ## Later Milestones
 
