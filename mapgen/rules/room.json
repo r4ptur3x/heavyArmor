@@ -16,6 +16,12 @@
     "minimizeUnusedSpace": true,
     "avoidAllWallPaddingBlocks": true
   },
+  "shapeTrimBehavior": {
+    "description": "The final external map shape does not need to remain a perfect rectangle or square. If satisfying a requested map size creates excess rows or columns that cause double walls, trim or omit those excess tiles instead of preserving the rectangle. For example, a requested 10x10 map may become 9x10, 10x9, or otherwise non-rectangular if trimming prevents doubled walls and keeps floors enclosed.",
+    "allowNonRectangularExternalShape": true,
+    "trimExcessRowsOrColumnsToPreventDoubleWalls": true,
+    "preserveRequestedSizeOnlyWhenClean": true
+  },
   "sharedWallBehavior": {
     "description": "When two rooms touch, their bordering wall lines must collapse into one shared wall line. Do not create two adjacent parallel wall rows or columns between touching rooms.",
     "maxSharedWallThicknessTiles": 1,
@@ -44,5 +50,5 @@
     "collapseAdjacentDoors": true,
     "maxSharedDoorThicknessTiles": 1
   },
-  "description": "Rooms are rectangular or square areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. When filling space, prefer the largest valid room interiors in the requested size band before creating smaller rooms. Adjacent rooms may share a single wall tile line instead of creating double walls. Outer boundaries may not become double walls or exterior floor rows. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. Internal wall seams should remain continuous except for intentional single-door openings. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
+  "description": "Rooms are rectangular or square areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. When filling space, prefer the largest valid room interiors in the requested size band before creating smaller rooms. Adjacent rooms may share a single wall tile line instead of creating double walls. The final exterior shape may be trimmed or non-rectangular if preserving the requested rectangular size would create double walls. Outer boundaries may not become double walls or exterior floor rows. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. Internal wall seams should remain continuous except for intentional single-door openings. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
 }
