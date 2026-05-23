@@ -1,5 +1,8 @@
 {
   "name": "room_Generated_Test",
+  "output": {
+    "folder": "maps"
+  },
   "description": "First map-generation test: fixed 20x20 map with floor by default and walls around the outer edge.",
   "grid": {
     "mode": "fixed",
