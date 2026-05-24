@@ -1,0 +1,12 @@
+{
+  "step": 5,
+  "name": "Final validation and CSV export",
+  "instructions": [
+    "Validate that no floor tile touches outside or missing space.",
+    "Validate that every exposed border tile is wall, window, or valid exterior door.",
+    "Reject double-wall layers and wall-door-wall caps backed by another wall layer.",
+    "Apply ragged trimming only outside the single derived wall layer.",
+    "Export CSV only after all validations pass.",
+    "Quote every CSV cell value."
+  ]
+}
