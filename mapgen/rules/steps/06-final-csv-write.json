@@ -1,0 +1,18 @@
+{
+  "step": 6,
+  "name": "Write final CSV map",
+  "instructions": [
+    "Write the final app-loadable CSV to maps/<mapName>.csv.",
+    "Use one quoted CSV cell per map tile.",
+    "Every tile value must use the app-compatible format: <asset type>, <damage>, <variant>.",
+    "Use default damage D99 and default variant 001 unless the map request or asset catalog specifies otherwise.",
+    "Do not include intermediate labels such as M, A, B, H, #, ?, or . in the final CSV.",
+    "Do not write floorplan drafts or wall drafts into maps/. Those belong in mapgen/intermediate/.",
+    "Final CSV rows may be ragged only when the generated map shape is intentionally ragged and all border/enclosure validations pass.",
+    "Do not overwrite unrelated maps unless the user explicitly asks."
+  ],
+  "outputPathPattern": "maps/<mapName>.csv",
+  "cellFormat": "<asset type>, <damage>, <variant>",
+  "requiredCellQuoting": true,
+  "forbiddenIntermediateSymbols": ["M", "A", "B", "C", "D", "E", "F", "G", "H", "#", "?", "."]
+}
