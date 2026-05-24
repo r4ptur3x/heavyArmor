@@ -1,0 +1,8 @@
+{
+  "step": 1,
+  "name": "Read request settings",
+  "instructions": [
+    "Record requested map name, maximum width, maximum height, raggedness, required room sizes/counts, hallway requirements, and required special contents.",
+    "Treat requested width and height as the target canvas for raggedness 0 and as a maximum canvas for higher raggedness values."
+  ]
+}
