@@ -9,6 +9,8 @@
   "mergeAdjacentDoors": true,
   "minimumDoors": 1,
   "allowWindows": true,
+  "raggednessRuleFile": "./raggedness.json",
+  "defaultRaggedness": 3,
   "packingBehavior": {
     "description": "When filling a requested area with rooms from a named size band, prefer the largest valid rectangular or square room interiors that fit the band and available space. Do not create smaller fragmented rooms or extra all-wall padding when a larger valid room can fill the space cleanly.",
     "preferLargestValidRoomInSizeBand": true,
@@ -62,5 +64,5 @@
     "collapseAdjacentDoors": true,
     "maxSharedDoorThicknessTiles": 1
   },
-  "description": "Rooms are rectangular or square areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. When filling space, prefer the largest valid room interiors in the requested size band before creating smaller rooms. If a clean fit is impossible, shrink edge or corner rooms on any side within their size band before adding padding walls. Adjacent rooms may share a single wall tile line instead of creating double walls. The final exterior shape may be trimmed, ragged, or non-rectangular on any side if preserving the requested rectangular size would create double walls. Outer boundaries may not become double walls or exterior floor rows. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. Internal wall seams should remain continuous except for intentional single-door openings. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
+  "description": "Rooms are rectangular or square areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Raggedness controls how closely the final map follows the requested external dimensions versus trimming unused space. When filling space, prefer the largest valid room interiors in the requested size band before creating smaller rooms. If a clean fit is impossible, shrink edge or corner rooms on any side within their size band before adding padding walls. Adjacent rooms may share a single wall tile line instead of creating double walls. The final exterior shape may be trimmed, ragged, or non-rectangular on any side if preserving the requested rectangular size would create double walls. Outer boundaries may not become double walls or exterior floor rows. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. Internal wall seams should remain continuous except for intentional single-door openings. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door."
 }
