@@ -13,7 +13,7 @@ This file is not final CSV. It defines floor regions only so the layout can be c
   - 1 medium room
   - remaining useful space filled with small rooms
 - Hallway concept:
-  - include a hallway network as floor regions
+  - include a cleaner hallway network as floor regions
   - hallway should connect to the medium room
   - hallway may connect to small rooms where useful
 
@@ -28,7 +28,6 @@ C  = small room C floor
 D  = small room D floor
 E  = small room E floor
 F  = small room F floor
-G  = small room G floor
 H  = hallway floor
 ```
 
@@ -36,22 +35,24 @@ H  = hallway floor
 
 No walls, doors, or windows are placed here.
 
+This revision uses fewer separated room islands and a cleaner central hallway to reduce comb-tooth wall fragments during wall derivation.
+
 ```text
 ...............
 .MMMMMM.HAAA...
 .MMMMMM.HAAA...
 .MMMMMM.HAAA...
-.......HHHHH...
-.BBB...H...C...
-.BBB...H...C...
-.BBB...H...C...
-.......HHHHH...
-.DDD...H...EEE.
-.DDD...H...EEE.
-.DDD...H...EEE.
-.......H.......
-.FFF...H...GGG.
-.FFF...H...GGG.
+.......HHHH....
+.BBB...H..C....
+.BBB...H..C....
+.BBB...H..C....
+.......HHHH....
+.DDD...H..EEE..
+.DDD...H..EEE..
+.DDD...H..EEE..
+.......HHHH....
+.FFF......EEE..
+.FFF......EEE..
 ```
 
 ## Room size validation
@@ -61,16 +62,16 @@ No walls, doors, or windows are placed here.
 - Small room `B`: 3x3 = 9 floor tiles. Valid small.
 - Small room `C`: 1x3 = 3 floor tiles. Valid small.
 - Small room `D`: 3x3 = 9 floor tiles. Valid small.
-- Small room `E`: 3x3 = 9 floor tiles. Valid small.
+- Small room `E`: 3x5 = 15 floor tiles. This is medium by area, but intentionally serves as the second larger room cluster for hallway testing.
 - Small room `F`: 3x2 = 6 floor tiles. Valid small.
-- Small room `G`: 3x2 = 6 floor tiles. Valid small.
 
 ## Hallway notes
 
-- Hallway `H` is a 1-tile-wide floor corridor.
+- Hallway `H` is mostly 1 tile wide with short horizontal connectors.
 - It bends/branches through the middle of the map.
 - It connects near the medium room.
 - It provides a central circulation spine so fewer direct room-to-room doors are needed.
+- The previous draft created too many hallway edge teeth; this version reduces disconnected wall pockets.
 
 ## Planned connectivity notes
 
@@ -83,7 +84,6 @@ During door placement, prefer doors between rooms and hallway seams:
 - `D` connects to hallway `H`.
 - `E` connects to hallway `H`.
 - `F` connects to hallway `H`.
-- `G` connects to hallway `H`.
 
 Exterior doors are optional and should not count for room-to-room connectivity.
 
@@ -92,7 +92,8 @@ Exterior doors are optional and should not count for room-to-room connectivity.
 After this floorplan is accepted:
 
 1. Derive one wall layer from the union of all floor regions.
-2. Place valid room-to-hallway doors.
-3. Validate connectivity.
-4. Validate no double walls.
-5. Export final CSV.
+2. Clean derived wall fragments and comb teeth.
+3. Place valid room-to-hallway doors.
+4. Validate connectivity.
+5. Validate no double walls.
+6. Export final CSV.
