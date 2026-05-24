@@ -1,0 +1,11 @@
+{
+  "step": 2,
+  "name": "Create intermediate floorplan draft",
+  "instructions": [
+    "Create a disposable markdown draft in mapgen/intermediate/.",
+    "The draft should define floor regions only.",
+    "Do not place walls, doors, or windows yet.",
+    "Include room labels, hallway labels, target size, raggedness, and room size validation.",
+    "Use the floorplan draft to validate the floor union before deriving walls."
+  ]
+}
