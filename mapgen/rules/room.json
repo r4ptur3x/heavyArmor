@@ -47,11 +47,15 @@
     "appliesToSides": ["north", "south", "east", "west"]
   },
   "borderWallBehavior": {
-    "description": "The visible exterior border of the generated map must always exist as wall tiles. Border wall tiles may be replaced only by valid exterior doors or windows. Ragged rows or columns may be shorter, but the last visible tile along every exterior edge must still be wall, door, or window, not missing floor space. Remove an unnecessary door rather than deleting border wall tiles if the room remains internally reachable.",
+    "description": "The visible exterior border of the generated map must always exist as wall tiles. Border wall tiles may be replaced only by valid exterior doors or windows. Ragged rows or columns may be shorter, but every exposed edge of every existing tile must be checked. Any floor tile with missing/outside space directly north, south, east, or west is invalid. If a row is shorter than the row above it, the overhanging cells in the longer row must be exterior-safe border tiles, not floors. Remove unnecessary doors or add/restore wall tiles rather than deleting border wall tiles if the room remains internally reachable.",
     "exteriorBorderMustExist": true,
     "borderBaseTile": "wall",
     "borderReplaceableBy": ["door", "window"],
     "missingBorderCellsAreInvalid": true,
+    "floorMayNotTouchOutside": true,
+    "checkAllFourCardinalEdgesOfEveryTile": true,
+    "raggedRowOverhangFloorsAreInvalid": true,
+    "raggedColumnOverhangFloorsAreInvalid": true,
     "preferRemoveDoorOverRemovingBorderWall": true
   },
   "enclosureBehavior": {
@@ -72,5 +76,5 @@
     "collapseAdjacentDoors": true,
     "maxSharedDoorThicknessTiles": 1
   },
-  "description": "Rooms are rectangular or square areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Raggedness controls how closely the final map follows the requested external dimensions versus trimming unused space. When filling space, prefer the largest valid room interiors in the requested size band before creating smaller rooms. If a clean fit is impossible, shrink edge or corner rooms on any side within their size band before adding padding walls. Adjacent rooms may share a single wall tile line instead of creating double walls. The final exterior shape may be trimmed, ragged, or non-rectangular on any side if preserving the requested rectangular size would create double walls, but every visible exterior border must still be wall, door, or window. Outer boundaries may not become double walls or exterior floor rows. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. Internal wall seams should remain continuous except for intentional single-door openings. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door, but unnecessary doors may be removed if the room remains reachable from the interior floorplan."
+  "description": "Rooms are rectangular or square areas with floor interiors and wall perimeters. Room size measurements are based on interior floor tiles only. Walls add one tile around the floor area. Raggedness controls how closely the final map follows the requested external dimensions versus trimming unused space. When filling space, prefer the largest valid room interiors in the requested size band before creating smaller rooms. If a clean fit is impossible, shrink edge or corner rooms on any side within their size band before adding padding walls. Adjacent rooms may share a single wall tile line instead of creating double walls. The final exterior shape may be trimmed, ragged, or non-rectangular on any side if preserving the requested rectangular size would create double walls, but every exposed border must still be wall, door, or window. No floor tile may touch outside/missing space in any cardinal direction. Outer boundaries may not become double walls or exterior floor rows. Collapsed floor rows or columns must remain inside the final outer walls, never outside them. Internal wall seams should remain continuous except for intentional single-door openings. If two door locations would be adjacent or overlapping on a shared wall, they should merge into one door tile. Every room must have at least one door, but unnecessary doors may be removed if the room remains reachable from the interior floorplan."
 }
