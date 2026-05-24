@@ -2,18 +2,19 @@
 
 Load this file before helping create or edit Heavy Armor maps.
 
-This file is the bootstrap file for map-generation work. After loading it, load the additional rule and reference files listed in the bootstrap checklist below.
+This file is the bootstrap file for map-generation work. After loading it, immediately load `mapgen/rules/generation-pipeline.json`. Treat `generation-pipeline.json` as the source of truth for map creation. Older mapgen rule files are reference only unless the pipeline explicitly points to them.
 
 ## Bootstrap Checklist
 
 When initializing a fresh chat for Heavy Armor map generation, do the following:
 
 1. Load this file first.
-2. Load `mapgen/mapgen-design.md` next. Treat it as the current design reference for map-generation architecture.
-3. If `mapgen/catalogs/default-assets.json` exists, load it before choosing asset types, damage values, variants, or special item names.
-4. If `mapgen/example-map-spec.json` exists, load it as the current example format for new map specs.
-5. If `mapgen/generate-map.mjs` exists, load it before editing map specs or generator behavior so outputs match the current generator.
-6. If the user asks about current viewer behavior, fetch relevant files from `src/` on `main` before answering or editing.
+2. Load `mapgen/rules/generation-pipeline.json` immediately after this file. Treat it as the active checklist and source of truth for map generation.
+3. Load `mapgen/mapgen-design.md` next if it exists. Treat it as architecture/design reference only where it does not conflict with the generation pipeline.
+4. If `mapgen/catalogs/default-assets.json` exists, load it before choosing asset types, damage values, variants, or special item names.
+5. If `mapgen/example-map-spec.json` exists, load it as the current example format for new map specs.
+6. If `mapgen/generate-map.mjs` exists, load it before editing map specs or generator behavior so outputs match the current generator.
+7. If the user asks about current viewer behavior, fetch relevant files from `src/` on `main` before answering or editing.
 
 If one of these files does not exist yet, say so briefly and continue using the available files.
 
@@ -64,13 +65,28 @@ wall, D99, 001,floor, D99, 001
 
 The incorrect format causes spreadsheet programs to split each tile into multiple columns.
 
+## Active Generation Source Of Truth
+
+For actual map generation, follow:
+
+```text
+mapgen/rules/generation-pipeline.json
+```
+
+That file supersedes older mapgen rule files when conflicts exist.
+
+Most important current principle:
+
+```text
+Generate floor regions first, then derive one wall layer from the final floor union.
+Do not generate walls room-by-room.
+```
+
 ## Goal
 
-Help the user describe a map in natural language, then convert that request into a structured map spec JSON file.
+Help the user describe a map in natural language, then convert that request into a structured map spec JSON file or final CSV map, depending on the current task.
 
-The JSON spec should preserve design intent such as rooms, contents, special items, locked doors, keypads, levers, stairs, and windows.
-
-A generator script will later compile the JSON spec into the final Google Sheet-compatible grid.
+The map-generation pipeline should preserve design intent such as rooms, contents, special items, locked doors, keypads, levers, stairs, and windows.
 
 ## Working Principle
 
@@ -80,9 +96,9 @@ Instead:
 
 ```text
 user request
-  -> GPT-authored map spec JSON
-  -> generator script
-  -> Google Sheet grid cells
+  -> GPT-authored map spec JSON or pipeline-generated CSV
+  -> generator script / mapgen process
+  -> Google Sheet-compatible grid cells
   -> existing Heavy Armor viewer
 ```
 
@@ -92,16 +108,18 @@ Use this loading order for map-generation work:
 
 ```text
 1. mapgen/GPT-MAPGEN-INSTRUCTIONS.md
-2. mapgen/mapgen-design.md
-3. mapgen/catalogs/default-assets.json
-4. mapgen/example-map-spec.json
-5. mapgen/generate-map.mjs
+2. mapgen/rules/generation-pipeline.json
+3. mapgen/mapgen-design.md
+4. mapgen/catalogs/default-assets.json
+5. mapgen/example-map-spec.json
+6. mapgen/generate-map.mjs
 ```
 
 Expected roles:
 
 ```text
 GPT-MAPGEN-INSTRUCTIONS.md = bootstrap and workflow rules
+generation-pipeline.json = active map-generation checklist and source of truth
 mapgen-design.md = architecture and design intent
 default-assets.json = valid asset types and defaults
 example-map-spec.json = example map source structure
@@ -118,7 +136,7 @@ The user should be able to say things like:
 Make me a small bunker map with an entry room, a lab, a storage room, and a locked vault. Put a McGuffin in the vault. Put a keypad outside the vault door. Add stairs down in the lab.
 ```
 
-GPT should respond by creating or editing a JSON map spec, not by manually writing every final sheet cell unless specifically asked.
+GPT should respond by creating or editing a JSON map spec or final CSV, depending on what the user asks for.
 
 ## Map Spec Requirements
 
@@ -127,6 +145,7 @@ A map spec should include:
 - map name
 - grid mode
 - fixed or auto size
+- raggedness if relevant
 - default damage value
 - default variant value
 - rooms
@@ -143,7 +162,11 @@ A map spec should include:
 
 Support both fixed and auto sizing conceptually.
 
-For early tests, prefer fixed 20x20 because the current test sheet is 20 rows by 20 columns.
+Requested dimensions are interpreted through `generation-pipeline.json`.
+
+For raggedness 0, preserve requested dimensions as closely as possible.
+
+For higher raggedness, requested dimensions become a target or maximum canvas depending on the raggedness level.
 
 Example:
 
@@ -153,7 +176,7 @@ Example:
     "mode": "fixed",
     "width": 20,
     "height": 20,
-    "padding": 1
+    "raggedness": 3
   }
 }
 ```
@@ -164,7 +187,8 @@ For later maps, auto sizing may be used:
 {
   "grid": {
     "mode": "auto",
-    "padding": 2
+    "padding": 2,
+    "raggedness": 5
   }
 }
 ```
@@ -173,16 +197,17 @@ For later maps, auto sizing may be used:
 
 Use named room sizes unless the user gives exact dimensions.
 
-Suggested ranges:
+Active room-size rules come from `mapgen/rules/generation-pipeline.json`.
 
-```json
-{
-  "tiny": { "width": [3, 4], "height": [3, 4] },
-  "small": { "width": [5, 7], "height": [5, 7] },
-  "medium": { "width": [8, 11], "height": [7, 10] },
-  "large": { "width": [12, 16], "height": [10, 14] }
-}
+Current room sizes are based on interior floor tile area only:
+
+```text
+small = 1-9 floor tiles
+medium = 9-18 floor tiles
+large = 18-30 floor tiles
 ```
+
+Walls are derived after floor interiors are placed and do not count toward room size.
 
 ## Required Items
 
@@ -225,6 +250,8 @@ Example:
 
 Controls should appear as room contents or required items.
 
+Door validity is controlled by `generation-pipeline.json`.
+
 ## Procedural Room Filling
 
 GPT should help define what belongs in a room. The generator should decide exact valid placement.
@@ -246,15 +273,11 @@ Example:
 
 ## Output Rules
 
-When asked to create a map, produce a JSON map spec first.
+When asked to create a map spec, produce a JSON map spec first.
+
+When asked to directly create or remake a CSV map, write the CSV directly to `maps/` using the active generation pipeline.
 
 Do not overwrite the live `room_Test` Google Sheet unless the user explicitly asks.
-
-Prefer generating or targeting a test sheet/tab name such as:
-
-```text
-room_Generated_Test
-```
 
 CSV map outputs must quote every cell value.
 
@@ -263,12 +286,12 @@ CSV map outputs must quote every cell value.
 The first generator should:
 
 1. Read a JSON map spec.
-2. Create a fixed 20x20 grid.
-3. Fill it with default floor.
-4. Add room walls.
-5. Add doors.
-6. Add windows.
-7. Place required items.
+2. Place floor interiors first.
+3. Derive one wall layer from the final floor union.
+4. Add valid doors.
+5. Add windows.
+6. Place required items.
+7. Validate borders, connectivity, and no-double-wall constraints.
 8. Export cells as `<asset type>, <damage>, <variant>`.
 9. Quote every CSV cell value during CSV export.
 
