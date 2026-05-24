@@ -1,0 +1,42 @@
+{
+  "type": "raggedness",
+  "scale": {
+    "min": 0,
+    "max": 10,
+    "default": 3
+  },
+  "description": "Controls how much the final map border may deviate from the requested square or rectangular dimensions when trimming excess space, preventing double walls, and fitting generated content.",
+  "levels": {
+    "0": {
+      "name": "not ragged",
+      "behavior": "Fit as closely as possible to the requested square or rectangular dimensions. Preserve the requested width and height unless doing so would break map validity. Prefer resizing or rearranging rooms over trimming the border."
+    },
+    "1-3": {
+      "name": "lightly ragged",
+      "behavior": "Allow small local trims on edges or corners to prevent doubled walls or invalid padding, but keep the final footprint visually close to the requested dimensions."
+    },
+    "4-6": {
+      "name": "moderately ragged",
+      "behavior": "Allow noticeable stepped or uneven edges when they improve room packing, reduce wasted space, or prevent doubled walls. The map should still broadly resemble the requested size."
+    },
+    "7-9": {
+      "name": "very ragged",
+      "behavior": "Allow major border cuts and uneven silhouettes. Preserve only the useful generated structure and necessary enclosure, while still trying to respect the requested scale."
+    },
+    "10": {
+      "name": "content-tight",
+      "behavior": "Trim the final map to include only the specified/generated contents and their required enclosing walls. The requested dimensions act as a maximum canvas, not a target footprint."
+    }
+  },
+  "rules": {
+    "preventDoubleWallsOverridesRequestedShape": true,
+    "allFloorsMustRemainEnclosed": true,
+    "raggednessZeroStillAllowsValidityTrims": true,
+    "raggednessTenMayIgnoreUnusedRequestedSpace": true
+  },
+  "examples": [
+    "raggedness 0: a requested 15x15 map should remain as close to 15x15 as possible.",
+    "raggedness 3: a corner room may shrink or a small edge notch may be trimmed to avoid double walls.",
+    "raggedness 10: unused border space is removed so the final CSV contains only the generated floorplan footprint."
+  ]
+}
