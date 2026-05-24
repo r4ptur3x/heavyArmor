@@ -1,0 +1,13 @@
+{
+  "step": 4,
+  "name": "Place and validate doors",
+  "instructions": [
+    "Place doors only by replacing existing wall tiles.",
+    "Interior doors must connect floor-to-floor on opposite through-sides.",
+    "Exterior doors must connect floor-to-outside.",
+    "Doors may not be adjacent to other doors.",
+    "Doors may not open into walls, windows, or other doors.",
+    "Prefer room-to-hallway doors when hallways exist.",
+    "Validate all-room reachability after door placement."
+  ]
+}
