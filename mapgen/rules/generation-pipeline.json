@@ -1,6 +1,6 @@
 {
   "type": "generationPipeline",
-  "version": 3,
+  "version": 4,
   "status": "sourceOfTruth",
   "description": "Checklist-first map generation pipeline for Heavy Armor CSV maps. This file is the source-of-truth index and loading sequence. Detailed step instructions live in mapgen/rules/steps/ so each step can be edited independently.",
   "supersedes": [
@@ -16,7 +16,8 @@
     "./steps/02-floorplan-draft.json",
     "./steps/03-wall-derivation-draft.json",
     "./steps/04-door-placement-validation.json",
-    "./steps/05-final-validation-export.json"
+    "./steps/05-final-validation-export.json",
+    "./steps/06-final-csv-write.json"
   ],
   "tileFormat": {
     "csvCellFormat": "<asset type>, <damage>, <variant>",
