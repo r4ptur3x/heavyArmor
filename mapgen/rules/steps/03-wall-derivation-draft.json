@@ -1,0 +1,11 @@
+{
+  "step": 3,
+  "name": "Create wall derivation draft",
+  "instructions": [
+    "Derive one wall layer from the union of all floor regions.",
+    "Do not generate walls independently per room.",
+    "Create a disposable wall draft markdown file in mapgen/intermediate/.",
+    "Mark possible room-to-hallway and room-to-room door candidates.",
+    "Use the wall draft to validate enclosure and identify bad seam patterns before placing final doors."
+  ]
+}
