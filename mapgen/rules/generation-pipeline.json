@@ -1,6 +1,6 @@
 {
   "type": "generationPipeline",
-  "version": 4,
+  "version": 5,
   "status": "sourceOfTruth",
   "description": "Checklist-first map generation pipeline for Heavy Armor CSV maps. This file is the source-of-truth index and loading sequence. Detailed step instructions live in mapgen/rules/steps/ so each step can be edited independently.",
   "supersedes": [
@@ -15,6 +15,7 @@
     "./steps/01-request-settings.json",
     "./steps/02-floorplan-draft.json",
     "./steps/03-wall-derivation-draft.json",
+    "./steps/04-wall-cleanup-validation.json",
     "./steps/04-door-placement-validation.json",
     "./steps/05-final-validation-export.json",
     "./steps/06-final-csv-write.json"
@@ -22,20 +23,14 @@
   "tileFormat": {
     "csvCellFormat": "<asset type>, <damage>, <variant>",
     "defaultDamage": "D99",
-    "defaultVariant": "001",
-    "examples": {
-      "floor": "floor, D99, 001",
-      "wall": "wall, D99, 001",
-      "door": "door, D99, 001",
-      "window": "window, D99, 001"
-    }
+    "defaultVariant": "001"
   },
   "floorRegionTypes": {
     "room": {
       "description": "A room is an intended enclosed usable space with a named size category or exact dimensions. Room size is measured by interior floor tile area only."
     },
     "hallway": {
-      "description": "A hallway is a corridor floor region that connects rooms or other hallways. Hallways are placed before walls are derived, so they receive walls from the same single wall-layer process as rooms.",
+      "description": "A hallway is a corridor floor region that connects rooms or other hallways.",
       "defaultWidthTiles": 1,
       "allowedWidthTiles": [1, 2],
       "mayBend": true,
@@ -48,21 +43,18 @@
     "Generate floors first. Do not generate walls room-by-room.",
     "Create intermediate drafts before final CSV output.",
     "Hallways are floor regions and must be placed before walls are derived.",
-    "Walls are derived once from the final union of all floor regions, including rooms and hallways.",
-    "No double walls anywhere. Do not solve exposed floors by adding a second wall layer.",
-    "Every visible exterior border of the final ragged shape must be wall, door, or window.",
+    "Walls are derived once from the final union of all floor regions.",
+    "No double walls anywhere.",
     "No floor tile may touch outside or missing space in the four cardinal directions.",
     "Interior doors must connect floor to floor on opposite through-sides.",
-    "Exterior doors may connect floor to outside, but exterior doors do not count for room-to-room connectivity.",
     "Doors may not be adjacent to other doors.",
-    "All rooms must be reachable from all other rooms through interior floors, hallways, and valid interior doors."
+    "All rooms must be internally reachable."
   ],
   "roomSizes": {
     "measurement": "interiorFloorAreaTilesOnly",
     "small": { "min": 1, "max": 9 },
     "medium": { "min": 9, "max": 18 },
-    "large": { "min": 18, "max": 30 },
-    "boundaryBehavior": "If a boundary value appears in two bands, prefer the smaller named size unless the user explicitly asks otherwise."
+    "large": { "min": 18, "max": 30 }
   },
   "intermediateWorkflow": {
     "folder": "mapgen/intermediate/",
