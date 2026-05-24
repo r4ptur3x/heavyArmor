@@ -1,0 +1,29 @@
+{
+  "step": 4,
+  "name": "Clean and validate derived walls",
+  "instructions": [
+    "Run this step after deriving the first wall layer and before placing doors.",
+    "A valid wall tile must be part of a meaningful room, hallway, or exterior boundary.",
+    "Remove isolated wall stubs, comb teeth, one-tile wall fragments, and wall pockets that do not enclose or separate useful floor regions.",
+    "Do not use wall tiles as decorative filler or padding.",
+    "Do not create small wall columns along hallway edges unless they are part of a continuous boundary between a room and the hallway.",
+    "A wall tile should usually have floor on at least one cardinal side and either outside/empty or another floor region on the opposite side.",
+    "If a derived wall creates a jagged tooth pattern along a hallway, simplify the floorplan or move the boundary before door placement.",
+    "If cleanup would expose a floor to outside, revise the floor region shape instead of adding a second wall layer.",
+    "After cleanup, every floor region must still be enclosed by exactly one wall layer before doors/windows are cut."
+  ],
+  "rejectPatterns": [
+    "isolated wall tile not connected to a useful boundary",
+    "comb-tooth wall fragments along hallways",
+    "wall-door-wall or wall-wall caps backed by another wall layer",
+    "parallel adjacent wall layers",
+    "all-wall padding blocks",
+    "dead wall pockets that do not border floor"
+  ],
+  "preferredFixes": [
+    "trim the invalid wall fragment",
+    "simplify the nearby floor boundary",
+    "move the hallway or room edge before wall derivation",
+    "resize an edge or corner room within its allowed size band"
+  ]
+}
