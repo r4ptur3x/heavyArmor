@@ -1,0 +1,19 @@
+{
+  "step": "2a",
+  "name": "Validate floorplan border buffer",
+  "instructions": [
+    "Run this check while drafting floor-only intermediate maps, before wall derivation.",
+    "Room floor interiors should not touch the outer edge of the target canvas unless the user explicitly requests border-touching rooms.",
+    "Leave at least one empty tile between room floor interiors and the outer canvas edge so wall derivation can create a clean exterior wall layer.",
+    "Hallways should also avoid touching the outer edge unless intentionally becoming an exterior entrance path.",
+    "If a room or hallway touches the border unintentionally, move it inward, shrink it, or trim the target footprint before deriving walls.",
+    "This rule reduces exposed floors, accidental exterior doors, double exterior walls, and ragged edge artifacts."
+  ],
+  "defaultBorderBufferTiles": 1,
+  "appliesToFloorRegionTypes": ["room", "hallway"],
+  "allowedExceptions": [
+    "explicit exterior entrance",
+    "user-requested border-touching room",
+    "intentional map-edge opening validated later as a legal exterior door"
+  ]
+}
