@@ -1,7 +1,8 @@
 {
   "type": "generationPipeline",
-  "version": 2,
+  "version": 3,
   "status": "sourceOfTruth",
+  "description": "Checklist-first map generation pipeline for Heavy Armor CSV maps. This file is the source-of-truth index and loading sequence. Detailed step instructions live in mapgen/rules/steps/ so each step can be edited independently.",
   "supersedes": [
     "./room.json",
     "./door-placement.json",
@@ -9,7 +10,14 @@
     "./room-size.json",
     "./window-placement.json"
   ],
-  "description": "Checklist-first map generation pipeline for Heavy Armor CSV maps. This file is the source of truth when generating maps. Older mapgen rule files may be used as reference only when this pipeline explicitly points to them. If older rules conflict with this pipeline, follow this pipeline.",
+  "stepDirectory": "./steps/",
+  "stepFiles": [
+    "./steps/01-request-settings.json",
+    "./steps/02-floorplan-draft.json",
+    "./steps/03-wall-derivation-draft.json",
+    "./steps/04-door-placement-validation.json",
+    "./steps/05-final-validation-export.json"
+  ],
   "tileFormat": {
     "csvCellFormat": "<asset type>, <damage>, <variant>",
     "defaultDamage": "D99",
@@ -26,7 +34,7 @@
       "description": "A room is an intended enclosed usable space with a named size category or exact dimensions. Room size is measured by interior floor tile area only."
     },
     "hallway": {
-      "description": "A hallway is a corridor floor region that connects rooms or other hallways. Hallways are placed during floor-region placement before walls are derived, so they receive walls from the same single wall-layer process as rooms.",
+      "description": "A hallway is a corridor floor region that connects rooms or other hallways. Hallways are placed before walls are derived, so they receive walls from the same single wall-layer process as rooms.",
       "defaultWidthTiles": 1,
       "allowedWidthTiles": [1, 2],
       "mayBend": true,
@@ -37,6 +45,7 @@
   },
   "hardInvariants": [
     "Generate floors first. Do not generate walls room-by-room.",
+    "Create intermediate drafts before final CSV output.",
     "Hallways are floor regions and must be placed before walls are derived.",
     "Walls are derived once from the final union of all floor regions, including rooms and hallways.",
     "No double walls anywhere. Do not solve exposed floors by adding a second wall layer.",
@@ -47,138 +56,17 @@
     "Doors may not be adjacent to other doors.",
     "All rooms must be reachable from all other rooms through interior floors, hallways, and valid interior doors."
   ],
-  "pipeline": [
-    {
-      "step": 1,
-      "name": "Read request settings",
-      "instructions": [
-        "Record requested map name, maximum width, maximum height, raggedness, required room sizes/counts, hallway requirements, and required special contents.",
-        "Treat requested width and height as the target canvas for raggedness 0 and as a maximum canvas for higher raggedness values."
-      ]
-    },
-    {
-      "step": 2,
-      "name": "Choose room interiors",
-      "instructions": [
-        "Room size categories are based only on interior floor tile area.",
-        "Small rooms are 1-9 floor tiles.",
-        "Medium rooms are 9-18 floor tiles.",
-        "Large rooms are 18-30 floor tiles.",
-        "Rooms may be rectangles or squares.",
-        "Prefer the largest valid room interiors in the requested size band before creating smaller rooms.",
-        "If a clean fit is impossible, shrink edge or corner rooms within their size band before adding padding."
-      ]
-    },
-    {
-      "step": 3,
-      "name": "Plan hallway floor regions",
-      "instructions": [
-        "If hallways are requested or useful, plan them as floor regions before walls exist.",
-        "A hallway is a corridor surrounded by derived walls after the floor union is complete.",
-        "Hallways should connect to medium and large rooms when those room types exist.",
-        "Hallways do not need to touch every small room.",
-        "Hallways may connect to other hallways to form bends, branches, or turns.",
-        "Default hallway width is 1 tile unless the user asks for wider corridors.",
-        "Prefer hallway paths that reduce the number of direct room-to-room doors needed while maintaining reachability."
-      ]
-    },
-    {
-      "step": 4,
-      "name": "Place floor regions only",
-      "instructions": [
-        "Place only floor interiors for all rooms and hallways.",
-        "Do not place walls, doors, or windows yet.",
-        "Allow rooms and hallways to touch conceptually, but track room floors and hallway floors separately in the intermediate plan.",
-        "Do not overlap floor regions unless intentionally merging a hallway connection or open area."
-      ]
-    },
-    {
-      "step": 5,
-      "name": "Derive one wall layer from floor union",
-      "instructions": [
-        "Create walls around the final union of floor regions, including rooms and hallways, not around each room independently.",
-        "Any non-floor tile directly north, south, east, or west of a floor tile becomes wall unless it will later become a valid door or window.",
-        "Because walls are derived from the floor union once, shared/internal walls must be one tile thick only.",
-        "Do not add all-wall padding rows or columns outside this wall layer."
-      ]
-    },
-    {
-      "step": 6,
-      "name": "Identify rooms, hallways, and internal wall seams",
-      "instructions": [
-        "Track which floor tiles belong to each intended room and which belong to hallways.",
-        "A wall tile between two rooms is an internal room-to-room wall candidate.",
-        "A wall tile between a room and a hallway is a room-to-hallway door candidate.",
-        "A wall tile between two hallway regions is usually unnecessary unless the hallways are intentionally separated.",
-        "A wall tile touching outside/missing space is an exterior wall candidate."
-      ]
-    },
-    {
-      "step": 7,
-      "name": "Place doors",
-      "instructions": [
-        "Place doors only by replacing existing wall tiles.",
-        "Interior doors must have floor on two opposite through-sides: north/south or east/west.",
-        "Exterior doors must have floor on one through-side and outside/missing space on the other through-side.",
-        "A door may not open into a wall, window, or another door.",
-        "Doors may not be adjacent to other doors in any cardinal direction.",
-        "Not every room needs a door on every wall.",
-        "Prefer connecting medium and large rooms to hallways when hallways exist.",
-        "Small rooms may connect directly to another room or to a hallway, as long as overall connectivity is valid.",
-        "Remove unnecessary doors if the room remains internally reachable."
-      ]
-    },
-    {
-      "step": 8,
-      "name": "Validate room and hallway connectivity",
-      "instructions": [
-        "Using only floor tiles, hallway tiles, and valid interior doors, verify every room can reach every other room.",
-        "Exterior doors do not count for room-to-room connectivity.",
-        "If hallways exist, verify medium and large rooms have an interior path to the hallway network unless the user explicitly asks otherwise.",
-        "If a room is isolated, add or move one valid interior door on a wall seam; do not add door chains or adjacent doors."
-      ]
-    },
-    {
-      "step": 9,
-      "name": "Apply raggedness trim",
-      "instructions": [
-        "Raggedness 0 preserves the requested rectangle as closely as possible.",
-        "Raggedness 1-3 allows small local trims on edges or corners but should broadly preserve the requested footprint.",
-        "Raggedness 4-6 allows noticeable uneven edges while still resembling the requested size.",
-        "Raggedness 7-9 allows major cuts while preserving useful generated structure.",
-        "Raggedness 10 trims to the generated contents and required enclosing walls only.",
-        "Trim only outside the single derived wall layer.",
-        "Never trim a wall if doing so would expose a floor tile to outside/missing space.",
-        "Never fill ragged trim gaps with a second wall layer."
-      ]
-    },
-    {
-      "step": 10,
-      "name": "Validate final border",
-      "instructions": [
-        "Check every existing tile in the final ragged CSV shape.",
-        "If any floor tile has outside/missing space directly north, south, east, or west, the map is invalid.",
-        "Every exposed outside-facing tile must be wall, window, or a valid exterior door.",
-        "Ragged row overhangs are allowed only when the overhanging tiles are exterior-safe border tiles, not floors."
-      ]
-    },
-    {
-      "step": 11,
-      "name": "Validate no double walls",
-      "instructions": [
-        "Reject any parallel adjacent wall layers where a wall/door/window line is backed by another wall/door/window line instead of floor or outside.",
-        "Reject wall-door-wall caps backed by wall-wall-wall or similar patterns.",
-        "If a double wall is found, fix it by trimming the shape, resizing a room, or moving the border. Do not add more walls."
-      ]
-    },
-    {
-      "step": 12,
-      "name": "Export CSV",
-      "instructions": [
-        "Export only after all validations pass.",
-        "Use one CSV cell per map tile.",
-        "Use the app-compatible format: <asset type>, <damage>, <variant>."
-      ]
-    }
-  ]
+  "roomSizes": {
+    "measurement": "interiorFloorAreaTilesOnly",
+    "small": { "min": 1, "max": 9 },
+    "medium": { "min": 9, "max": 18 },
+    "large": { "min": 18, "max": 30 },
+    "boundaryBehavior": "If a boundary value appears in two bands, prefer the smaller named size unless the user explicitly asks otherwise."
+  },
+  "intermediateWorkflow": {
+    "folder": "mapgen/intermediate/",
+    "safeToDelete": true,
+    "floorplanDraftSuffix": "-floorplan.md",
+    "wallDraftSuffix": "-wall-draft.md"
+  }
 }
